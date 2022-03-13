@@ -4,7 +4,14 @@ body {
   line-height: 1.5em;
   font-weight: 300;
   font-size: 16px;
-  color: #666;
+  color: #3B3B3B; /* #666 */
+}
+.post {
+  font-family: 'Helvetica Neue Light', HelveticaNeue-Light, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font size: 14px;
+}
+.post p {
+    text-align: justify;
 }
 hr {
   margin-top: 20px;
@@ -149,6 +156,47 @@ div.col-sm-3 div.profile-about {
 .post-content img,
 .content img {
   max-width: 100%
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+    border: 3px solid #8C8C8C;
+    margin-bottom: 10px
+}
+th {
+    text-align: left
+}
+th, td {
+    border: 1px solid #8C8C8C; 
+    padding:4px 6px;
+}
+
+img.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.img-table-centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: none;
+}
+.img-table-centered th {
+    border: none;
+    padding: none;
+    font-size: 10px;
+}
+.img-table-centered td {
+    border: none;
+    padding: none;
+    font-size: 10px;
+}
+
+pre code {
+    white-space: pre
 }
 
 /* Responsive Conditional */
