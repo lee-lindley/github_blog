@@ -2,12 +2,12 @@ title: Lee Lindley Scratchpad
 description: Posts on Technical Subjects, mostly Oracle and Linux
 author: Lee Lindley
 github: https://github.com/lee-lindley
-about: I'm Just Another Perl Hacker who wound up in a large Oracle Database playground
+about: I'm Just Another Perl Hacker who wound up in a big Oracle Database playground
 disqus_shortname: leelindleyscratchpad
 google_analytics:
 
 enableTags: true
-tagarray: [oracle, linux, perl, sql, plsql, pl/sql]
+tagarray: [oracle, linux, perl, sql, plsql, pl/sql, object_types]
 
 collections:
   project:

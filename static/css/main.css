@@ -158,6 +158,10 @@ div.col-sm-3 div.profile-about {
   max-width: 100%
 }
 
+.table-scroll {
+    overflow-x: auto
+}
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
