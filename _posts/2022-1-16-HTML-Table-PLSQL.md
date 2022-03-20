@@ -63,14 +63,18 @@ Where the solution becomes more complex is when we direct style elements to part
 columns or rows. The one to solve our specific issue of right justifying particular columns is encoded
 as:
 
+```css
     tr > td:nth-of-type(4) { text-align:right; }
+```
 
 Huh. That was my first thought. I'll read that as for any table row do this for the fourth table data element (aka column).
 I'm not going to try to explain the rules because I'll butcher it, but that is what it does.
 
 A related construct that lets us alternate the background color on rows is
 
+```css
     tr:nth-child(odd) { background-color: AliceBlue }
+```
 
 That says for table row elements, on the odd rows use this background color. You could leave the even rows
 with the default background or make another directive for nth-child(even).
@@ -82,6 +86,7 @@ for our query with any style adjustments you desire. You don't have to understan
 you can copy/paste the default style and tweak it a bit. This one is on the fancy side while the 
 default from the package is an austere black and white.
 
+```html
 	<div id="plsql-table">
 	<style type="text/css" scoped>
 	
@@ -134,8 +139,9 @@ default from the package is an austere black and white.
 	</tr>
 	<tr>
 	</table></div>
+```
 
-And here is how it is rendered in my browser:
+Here is how it is rendered in my browser:
 
 | *HTML Table Markup from PL/SQL* |
 |:--:|

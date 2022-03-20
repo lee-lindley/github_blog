@@ -84,7 +84,7 @@ At least for Oracle versions 10 through 19, updating a comment on a table counte
 used the table as needing to be parsed again. (You do have to make the comment different than the existing one though
 or it is a noop.) Observe:
 
-```sql
+```plsql
 select * from app_log_app
 ;
 SELECT sql_id,  parse_calls, sql_text
@@ -100,7 +100,7 @@ SQL_ID | PARSE_CALLS | SQL_TEXT
 
 Notcie the number of parse calls is *one*.
 
-```sql
+```plsql
 BEGIN
 EXECUTE IMMEDIATE q'{COMMENT ON TABLE app_log_app IS 'invalidate plan comment }'
     ||TO_CHAR(SYSDATE,'MM/DD/YYYY HH24:MI:SS')
@@ -174,7 +174,7 @@ use case. The term "minimal" leaves some wiggle room. For the scenario I describ
 as little as a single *CARDINALITY* hint on the driver table plus a degree of parallel hint for the entire query. 
 Example:
 
-```sql
+```plsql
     v_sql := q'!INSERT INTO ...
         SELECT /*+ CARDINALITY(d __DRIVER_TABLE_CARDINALITY__) __PARALLEL__ */
             ...
@@ -214,7 +214,7 @@ Mr. Lewis would never say the words "bludgeon optimizer into submission").
 
 You may likely find yourself needing to use more than a single cardinality hint plus degree of parallelism. Example:
 
-```sql
+```plsql
     v_sql := q'!INSERT INTO ...
         SELECT 
             /*+ 

@@ -43,7 +43,7 @@ Reusing my spreadsheet example from the article mentioned at the top, and a base
 published by Tim Hall we have a sqlplus script that generates and extracts a BLOB
 to a file as base64 encoded text.
 
-```sql
+```plsql
 -- 16mb should be plenty for most spreadsheets.
 set long 16777216
 set longchunksize 32767

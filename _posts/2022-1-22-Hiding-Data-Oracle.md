@@ -100,7 +100,7 @@ but that seems draconian. Tracking everything by the *user* identification of th
 
 ### as_sftp_private_keys Table
 
-```sql
+```plsql
 CREATE TABLE as_sftp_private_keys
 (
     host  VARCHAR2(1000) NOT NULL
@@ -112,7 +112,7 @@ CREATE TABLE as_sftp_private_keys
 
 ### as_sftp_keymgmt Package Specfication
 
-```sql
+```plsql
 CREATE OR REPLACE PACKAGE as_sftp_keymgmt AS
     --
     -- Important! The private key lookup is case sensitive on i_host and i_user.
@@ -148,7 +148,7 @@ during login will work much like SSH/SFTP does on Unix by looking up the key.
 *as_sftp_keymgmt_security* package implements the policy checks that will, when installed via *DBMS_RLS*, control
 whether access to table *as_sftp_private_keys* is permitted.
 
-```sql
+```plsql
 CREATE OR REPLACE PACKAGE as_sftp_keymgmt_security
 AS
     --
@@ -184,7 +184,7 @@ not have 'WHERE' clauses. The implementation checks your condition after the ins
 if the operation is not allowed. This is different than the others where it quietly adds a WHERE condition
 to cause your operation to not match any rows.
 
-```sql
+```plsql
 GRANT EXECUTE ON as_sftp_keymgmt_security TO public;
 CREATE OR REPLACE PUBLIC SYNONYM as_sftp_keymgmt_security FOR lee.as_sftp_keymgmt_security ;
 BEGIN
@@ -227,7 +227,7 @@ Now we get to the fun stuff. How are we determining that ONLY a specific package
 We look at the call stack. It is tricky though because the *DBMS_RLS* operations insert themselves into the
 call stack! You must look back a few levels to find the original caller.
 
-```sql
+```plsql
 CREATE OR REPLACE PACKAGE BODY as_sftp_keymgmt_security IS
     FUNCTION user_data_select_security (owner VARCHAR2, objname VARCHAR2)
     RETURN VARCHAR2
@@ -404,7 +404,7 @@ Much of the code is repeated so I could have refactored it. Maybe later.
 
 Implementation of the methods to do the login and DML is anticlimatic.
 
-```sql
+```plsql
 CREATE OR REPLACE PACKAGE BODY as_sftp_keymgmt AS
     --
     -- This is the only method to select the private key when fine grained access control is added to the table

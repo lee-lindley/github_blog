@@ -32,7 +32,7 @@ because it is what it is. Yet some things we can do something about.
 Consider needing to take a nested table of column names and generate the list that goes
 with the INSERT(...) clause of the MERGE.
 
-```sql
+```plsql
     v_s := 'WHEN NOT MATCHED THEN INSERT('||v_arr_cols(1);
     FOR i IN 2..v_arr_cols.COUNT
     LOOP
@@ -49,7 +49,7 @@ Phew, that is ugly. Or how about the MERGE UPDATE clause? We need to write:
 I started off writing a custom *join* function that also took a template string as an argument.
 It was sort of a meld between the Perl *join* and *map* methods.
 
-```sql
+```plsql
     FUNCTION join(
         p_arr           sys.ku$_vcnt
         ,p_separator    VARCHAR2 DEFAULT ', '
@@ -86,7 +86,7 @@ It was sort of a meld between the Perl *join* and *map* methods.
 ```
 
 Now to write the UPDATE portion I have
-```sql
+```plsql
     v_s := 'WHEN MATCHED THEN UPDATE SET'
         ||join(v_arr_non_pk_cols, p_separator => ',
     '

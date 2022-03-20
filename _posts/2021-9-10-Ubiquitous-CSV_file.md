@@ -81,7 +81,7 @@ so it may be a decent option. We will come back to that.
 If you are stuck with an older version, you can concatenate data elements converted to text
 with comma's between them in your SQL statement and spool it to a text file. For example:
 
-```sql
+```plsql
 set linesize 200
 set pagesize 0
 set heading off
@@ -105,7 +105,7 @@ one careless data entry event away from waking up some poor support person in th
 when the file won't load because there is a comma in one of the field values. A little better pattern
 can protect against that:
 
-```sql
+```plsql
 set linesize 200
 set pagesize 0
 set heading off
@@ -141,7 +141,7 @@ formats contain a comma in the result.
 
 First we will try with *quote off*.
 
-```sql
+```plsql
 ALTER SESSION SET nls_date_format = 'YYYYMMDD, HH24:MI';
 ALTER SESSION SET nls_numeric_characters = ',.';
 set markup csv on quote off
@@ -181,7 +181,7 @@ for a job, I'll have to figure that out.
 
 Let's try the same but with *quote on*
 
-```sql
+```plsql
 ALTER SESSION SET nls_date_format = 'YYYYMMDD, HH24:MI';
 ALTER SESSION SET nls_numeric_characters = ',.';
 set markup csv on quote on
@@ -238,7 +238,7 @@ You can open a file on the database server and manually construct and write the 
 This is a fairly common technique I have seen deployed by clients (though they rarely bothered
 with the bulk collect).
 
-```sql
+```plsql
 DECLARE
     CURSOR c1 IS
         SELECT e.employee_id, e.last_name, e.first_name, d.department_name, salary

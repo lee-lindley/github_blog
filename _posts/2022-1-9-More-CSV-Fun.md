@@ -13,7 +13,7 @@ lists and strings that we can use to make PL/SQL a little less verbose for some 
 
 Consider the classic way you can hard code data in a SQL script:
 
-```sql
+```plsql
 WITH a AS (
     SELECT 'abc' AS col1, 123 AS col2, 'xyz' AS col3
     UNION ALL
@@ -50,7 +50,7 @@ to deal with that set of CSV records.
 
 An example tells the story better than all those words:
 
-```sql
+```plsql
 WITH a AS (
     SELECT perlish_util_udt(t.column_value) AS p
     FROM TABLE( perlish_util_udt.split_clob_to_lines(
@@ -75,7 +75,7 @@ which results in the following (where the quotes were put around the pieces by S
 
 Looking at the query in pieces
 
-```sql
+```plsql
                 perlish_util_udt.split_clob_to_lines(
 q'["abc",123,xyz
 def,456,"ghi"
@@ -86,7 +86,7 @@ lmn,789,opq]'
 *split_clob_to_line* returns a collection of VARCHAR2(4000) elements. We wrap that function call in a TABLE cast (perhaps
 unnecessarily depending on your Oracle version), and now we can select those lines as rows from the input string.
 
-```sql
+```plsql
     SELECT t.column_value AS r
     FROM TABLE( perlish_util_udt.split_clob_to_lines(
 q'["abc",123,xyz
@@ -134,7 +134,7 @@ getting too gross.
 
 That leads us to using *split_csv* to parse that CSV row/line into a collection:
 
-```sql
+```plsql
     SELECT perlish_util_udt(t.column_value) AS p
     FROM TABLE( perlish_util_udt.split_clob_to_lines(
 q'["abc",123,xyz
@@ -178,7 +178,7 @@ with an index parameter. The only trick is that in SQL in order to access an obj
 you must have a table alias for the "table" that provided the object instance in the query. In our example
 our "table" is named "a" and our alias for "a" is "x".
 
-```sql
+```plsql
 WITH a AS (
     SELECT perlish_util_udt(t.column_value) AS p
     FROM TABLE( perlish_util_udt.split_clob_to_lines(

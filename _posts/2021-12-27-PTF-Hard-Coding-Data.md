@@ -10,7 +10,7 @@ tags: [oracle, sql, plsql]
 ## Use Case - Populate a configuration table with multiple entries during deployment
 
 One method is to write a set of single insert statements with *values* clause. Example:
-```sql
+```plsql
 INSERT INTO util_config(app_name, param_name, param_value, created_by, created_dt)
     VALUES('My App', 'email_address', 'bogus@mycompany.com', USER, SYSDATE)
 ;
@@ -24,7 +24,7 @@ Of course you can only run that once in any region so it makes testing your depl
 It also doesn't handle changing your mind about a value. You could do a DELETE first and that is
 a fine answer for our deployment task, but I prefer a MERGE.
 
-```sql
+```plsql
 MERGE INTO util_config c
 USING (
     SELECT 'My App' AS app_name, 'email_address' AS param_name, 'bogus@mycompany.com' AS param_value FROM DUAL
@@ -50,7 +50,7 @@ often not Perl people. It is time to scratch this itch with some PL/SQL.
 I would like to have something where I can provide the table values in a CLOB, give it a set
 of column names and have it generate and execute the MERGE like so:
 
-```sql
+```plsql
 DECLARE
     v_lines CLOB := 
 'My App,email_address,"bogus@mycompany.com"
@@ -85,7 +85,7 @@ out to be important because the PTF model is one row of output for every row of 
 of the number of rows of input).
 
 I started off providing an input TABLE consisting of:
-```sql
+```plsql
 WITH a AS (
     SELECT CAST('my data' AS CLOB) AS c FROM dual
 ) SELECT * FROM my_ptf_function(a);
@@ -105,7 +105,7 @@ The PTF allows us to provide any field list and types at run time.
 
 Here is the package specification. I include the PTF function inside the package even though it can be standalone.
 
-```sql
+```plsql
 CREATE OR REPLACE PACKAGE csv_to_table_pkg 
 AUTHID CURRENT_USER
 AS
@@ -141,7 +141,7 @@ show errors
 
 You would call it like this:
 
-```sql
+```plsql
 create TABLE my_table_name(id number, msg VARCHAR2(1024), dt DATE);
 --
 SELECT x.*
@@ -256,7 +256,7 @@ that I support.
 I wrote a [blog post](https://leelindley.blogspot.com/2021/12/perl-regexp-vs-oracle.html) about
 *transform_perl_regexp*.
 
-```sql
+```plsql
 CREATE OR REPLACE PACKAGE BODY csv_to_table_pkg AS
 
     g_rows_regexp   VARCHAR2(32767);
@@ -709,7 +709,7 @@ show errors
 
 Here is how I could deploy the rows in my example at the start of this blog post:
 
-```sql
+```plsql
     MERGE INTO util_config
     USING (
         SELECT *

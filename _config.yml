@@ -9,6 +9,8 @@ google_analytics:
 enableTags: true
 tagarray: [oracle, linux, perl, sql, plsql, pl/sql, object_types]
 
+exclude: [Rakefile]
+
 collections:
   project:
     output: true

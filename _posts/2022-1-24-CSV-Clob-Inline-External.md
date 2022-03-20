@@ -30,7 +30,7 @@ and assume you, the developer who wants to load the CSV data, will hand craft th
 
 # Create File on Oracle Server
 
-```sql
+```plsql
 BEGIN
     DBMS_LOB.clob2file(q'[999, "Baggins", "Bilbo", "badboy, ringbearer"
 998, "Baggins", "Frodo",
@@ -45,7 +45,7 @@ END;
 
 Now we read from the file:
 
-```sql
+```plsql
     SELECT *
     FROM EXTERNAL(
         (
@@ -96,7 +96,7 @@ Without it our second record would fail to load.
 
 Being a good citizen, we remove our trash:
 
-```sql
+```plsql
 BEGIN
     UTL_FILE.fremove('TMP_DIR','temp_csv_load.csv');
 END;

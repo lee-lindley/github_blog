@@ -46,7 +46,7 @@ and populate a Private Temporary Table to contain your data from the CSV clob. H
 
 ## Example
 
-```sql
+```plsql
 BEGIN
     perlish_util_udt.create_ptt_csv('Employee ID, Last Name, First Name, nickname
 999, "Baggins", "Bilbo", "badboy, ringbearer"
@@ -74,7 +74,7 @@ we were using before. Under the covers that is what it does, but now we have som
 Given the prior work with *perlish_util_udt.split_clobs_to_lines* and *perlish_util_udt.split_csv*, this was not
 difficult to implement.
 
-```sql
+```plsql
 	STATIC PROCEDURE create_ptt_csv (
          -- creates private temporary table ora$ptt_csv with columns named in first row of data case preserved.
          -- All fields are varchar2(4000)
@@ -90,7 +90,7 @@ The first step, which is in the variable declarations, splits the clob up into a
 going to parse the first row into *v_cols* which we make into an object type so we can take advantage
 of our *map* and *join* methods to build the SQL we need to execute.
 
-```sql
+```plsql
         v_sql       CLOB;
     BEGIN
         v_cols := perlish_util_udt(perlish_util_udt.split_csv(v_rows(1), p_separator => p_separator, p_strip_dquote => 'Y'));
@@ -102,7 +102,7 @@ We parse the first row differently than the rest. We are going to enclose the da
 them if they exist. After we get our data from the first row, we delete it from the collection. We will later
 bind the collection array to a SQL statement and do not want the first row to be present.
 
-```sql
+```plsql
         v_sql := 'DROP TABLE ora$ptt_csv';
         BEGIN
             EXECUTE IMMEDIATE v_sql;
@@ -112,7 +112,7 @@ bind the collection array to a SQL statement and do not want the first row to be
 
 Drop the PTT if it already exists.
 
-```sql
+```plsql
         v_sql := 'CREATE PRIVATE TEMPORARY TABLE ora$ptt_csv(
 '
             ||v_cols.map('"$_"    VARCHAR2(4000)').join('
@@ -129,7 +129,7 @@ each column is. We just stuff each column value into a VARCHAR2(4000) field.
 
 The serveroutput of this code from running the example above was:
 
-```sql
+```plsql
 CREATE PRIVATE TEMPORARY TABLE ora$ptt_csv(
 "Employee ID"    VARCHAR2(4000)
 ,"Last Name"    VARCHAR2(4000)
@@ -139,7 +139,7 @@ CREATE PRIVATE TEMPORARY TABLE ora$ptt_csv(
 ```
 Now for the INSERT.
 
-```sql
+```plsql
         v_sql := q'[INSERT INTO ora$ptt_csv 
 WITH a AS (
     SELECT perlish_util_udt(
@@ -165,7 +165,7 @@ index value for each column. Once again *map* and *join* are handing for buildin
 substitution to *map* for this release.
 
 The serveroutput of this section from the example:
-```sql
+```plsql
 INSERT INTO ora$ptt_csv
 WITH a AS (
     SELECT perlish_util_udt(

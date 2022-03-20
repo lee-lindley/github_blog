@@ -32,7 +32,7 @@ Although Object types can have methods, we will focus on using them as a hierach
 
 We will use the *HR* sample schema for the demonstration. The example is contrived in that the overhead of putting the *department* data into a flattened row or running two separate queries, is minimal, and we would not bother normally. Pretend that we have a much larger common object, perhaps multiple disparate child arrays, and/or extremely high volume that will justify the added complexity.
 
-```sql
+```plsql
 CREATE OR REPLACE TYPE employee_udt AS OBJECT (
      last_name          VARCHAR2(25)
     ,first_name         VARCHAR2(20)
@@ -76,7 +76,7 @@ CREATE OR REPLACE TYPE arr_department_udt AS TABLE OF department_udt;
 
 Each department object will contain all of the employees in the department. The top level array of departments object is a single unit that can be transferred in one database call. Alternatively, if that object could be too large to be efficient, a cursor can return rows of *department_udt* objects, perhaps bulk fetched depending on how it is called. Here is a package that provides both. The query is written in multiple pieces using *WITH* subquery factoring to make it easier to follow (a practice I recommend to keep large queries easier to understand).
 
-```sql
+```plsql
 CREATE OR REPLACE PACKAGE employees_by_dept_pkg AS
     PROCEDURE get(p_arr_department OUT arr_department_udt);
     FUNCTION get RETURN arr_department_udt PIPELINED;
@@ -172,7 +172,7 @@ END employees_by_dept_pkg;
 
 To call the procedure version from a language using an Oracle database driver you would typically find the package in your IDE interface and allow it to help you build a class to call the procedure and populate an internal structure via the OUT parameter. For us mere mortals restricted to standard database tools such as sqldeveloper, we can use the pipelined table function
 
-```sql
+```plsql
 SELECT *
 FROM TABLE(employees_by_dept_pkg.get);
 ```
@@ -188,7 +188,7 @@ Here is one row as represented in sqldeveloper query result window:
 
 A query that joins back to the employee object column flattens it back out to one record per employee with duplication of the department information, but at least we can see everything.
 
-```sql
+```plsql
 SELECT department_name, manager_last_name, manager_first_name, e.*
 FROM TABLE(employees_by_dept_pkg.get) d
 INNER JOIN TABLE(d.arr_employee) e ON 1=1

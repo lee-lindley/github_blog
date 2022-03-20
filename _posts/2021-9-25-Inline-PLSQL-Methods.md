@@ -30,7 +30,7 @@ For this test my schema has not been granted *SELECT* on *HR.job_history*. I hav
 and that role has been granted *SELECT* on *HR.job_history*. If I attempted to create a function
 that read from the table *HR.job_history*, the create would fail. The inline PL/SQL function works though.
 
-```sql
+```plsql
 WITH FUNCTION get_hist_job_id(p_emp number) RETURN VARCHAR2
 AS
     l_job_id VARCHAR2(30);
@@ -68,7 +68,7 @@ or SqlDeveloper).
 As of Oracle 12.2 you can do this in straight SQL (see [TO_CLOB and TO_BLOB enhancements](https://odieweblog.wordpress.com/2017/04/17/oracle-12-2-to_clob-and-to_blob-enhancements/)), 
 but I'm going to use the example anyway.
 
-```sql
+```plsql
 WITH FUNCTION get_blob(p_directory VARCHAR2, p_filename VARCHAR2) RETURN BLOB
 AS
     l_bfile         BFILE;
@@ -112,7 +112,7 @@ files from a query, but they do not match this for capability. And if you happen
 already written a procedure that does much of what you need for your adhoc query, you can
 quickly copy/paste the code into a WITH clause and be ready to rock and roll.
 
-```sql
+```plsql
 WITH 
 FUNCTION get_xlsx(p_src SYS_REFCURSOR) RETURN BLOB AS
     v_blob          BLOB;
@@ -159,7 +159,7 @@ before I discovered this handy syntax.
 Since the ExcelGen package uses session level package global variables to store everything, 
 you could probably execute an anonymous PL/SQL
 block using a client declared context variable that does the first part of this through *setColumnFormat*, then use a simple 
-```sql
+```plsql
 SELECT ExcelGen.getFileContent(:v_ctxId) FROM dual;
 ```
 to get the result. I like the *WITH PL/SQL* version much better.
@@ -169,7 +169,7 @@ to get the result. I like the *WITH PL/SQL* version much better.
 Here is another example using [PdfGen](https://github.com/lee-lindley/PdfGen), a package I wrote that wraps
 the core *as_pdf3* written by Anton Scheffer.
 
-```sql
+```plsql
 WITH FUNCTION get_blob(p_src SYS_REFCURSOR) RETURN BLOB
 IS
     v_blob      BLOB;

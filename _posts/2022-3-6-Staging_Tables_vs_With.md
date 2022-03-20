@@ -76,7 +76,7 @@ As for being able to see intermediate resultsets, at least during development an
 easily alter the query to stop after any given CTE, then select from that CTE. You can select the entire resultset
 or use a where clause or even analytic.  For example:
 
-```sql
+```plsql
 WITH step1 AS (
     ...
 ), step2 AS (
@@ -91,7 +91,7 @@ INNER JOIN step2
 
 You make a copy and interject your debug select like so:
 
-```sql
+```plsql
 WITH step1 AS (
     ...
 ), step2 AS (
@@ -100,7 +100,7 @@ WITH step1 AS (
 **) select mycollist from step2 where xyz = 'mykey';  
 -- remainder of quuery does not run**
 
-```sql
+```plsql
 ), step3 AS (
     ...
 ) SELECT *
@@ -146,7 +146,7 @@ Purists will tell you that you just don't have your statistics right. I don't ar
 For the example below,
 Oracle will almost always merge the view named *keys* into the main select and do a single HASH UNIQUE.
 
-```sql
+```plsql
 WITH keys AS (
     SELECT DISTINCT key1, key2, key3
     FROM key_source
@@ -165,7 +165,7 @@ particular set of inputs, we are better off with two separate HASH UNIQUE operat
 
 In this scenario you can force Oracle to do two separate HASH UNIQUE operations by using the NO_MERGE hint:
 
-```sql
+```plsql
 WITH keys AS (
     SELECT /*+ NO_MERGE */ DISTINCT 
         key1, key2, key3
@@ -179,7 +179,7 @@ INNER JOIN sourcetable s
 I've also seen cases where Oracle chooses to merge in a subquery containing an analytic, doing the join first
 and then the analytic and the filter using the analytic column that was supposed to be applied before doing the join. 
 
-```sql
+```plsql
 WITH keys AS (
     SELECT ...
         ,ROW_NUMBER() OVER (PARTITION BY xyz ORDER by last_modified_dt DESC) AS rn
@@ -196,7 +196,7 @@ Maybe the optimizer is right.
 When it is wrong, you will notice a humongous hash join taking forever in order to save a little
 bit on that sort. That is when you can try making it do the sort first using NO_MERGE:
 
-```sql
+```plsql
 WITH keys AS (
     SELECT /*+ NO_MERGE */ ...
         ,ROW_NUMBER() OVER (PARTITION BY xyz ORDER by last_modified_dt DESC) AS rn
@@ -246,7 +246,7 @@ from candidate rows) and join them to our source. We cannot avoid that first ful
 If we have a staging table, we can bring the *ROWID* along, 
 then use that for the MERGE ON clause join back into the staging table.
 
-```sql
+```plsql
 MERGE INTO staging_table t
 USING (
     WITH lkup_value AS (
@@ -267,7 +267,7 @@ WHEN MATCHED THEN UPDATE SET
 
 Consider how we would do this in a series of steps using WITH clause CTEs in a single INSERT without the staging
 table:
-```sql
+```plsql
 INSERT INTO staging_table
 WITH x AS (
     ...

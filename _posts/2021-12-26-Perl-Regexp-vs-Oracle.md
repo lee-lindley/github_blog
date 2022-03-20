@@ -24,7 +24,7 @@ The following Function transforms a regular expression in a manner similar to th
 Perl would treat the 'x' modifier stripping comments and whitespace, plus allowing
 us to use '\n', '\r' and '\t' as character representations that are not stripped as whitespace. 
 
-```sql
+```plsql
     FUNCTION transform_perl_regexp(p_re VARCHAR2)
     RETURN VARCHAR2
     IS
@@ -70,7 +70,7 @@ I have more about that in the
 *plsql_utilities* library if it interests you, but the main point is to show the regular expression
 presentation in the Perl style and how it is transformed.
 
-```sql
+```plsql
 DECLARE
     v_lines     CLOB := 
 ------------------------

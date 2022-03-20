@@ -109,7 +109,7 @@ I maintain on github.
 
 Here are the PTF components of the package specification for our Example. There are a few more utility procedures and functions we will add later. The package name is *app_csv_pkg*.
 
-```sql
+```plsql
 CREATE OR REPLACE PACKAGE app_csv_pkg 
 AUTHID CURRENT_USER
 AS
@@ -182,7 +182,7 @@ It looks similar to the "Cursor id" value in *DBMS_SQL*.
 
 From the package body:
 
-```sql
+```plsql
     FUNCTION describe(
         p_tab IN OUT            DBMS_TF.TABLE_T
         ,p_header_row           VARCHAR2 := 'Y'
@@ -232,7 +232,7 @@ we will have one to one correspondence of output rows from input rows so no repl
 
 *fetch_rows* is where most of the work is done. There is a lot to unpack here
 
-```sql
+```plsql
     PROCEDURE fetch_rows(
          p_header_row           VARCHAR2 := 'Y'
         ,p_separator            VARCHAR2 := ','
@@ -261,7 +261,7 @@ be necessary to populate or use *v_repfac*.
 *v_fetch_pass* is used to determine whether or not we are on the first fetch and *v_out_row_i*
 is to keep track of the number of output rows on this fetch iteration.
 
-```sql
+```plsql
         -- If the user does not want to change the NLS formats for the session
         -- but has custom coversions for this query, then we will apply them using TO_CHAR
         TYPE t_conv_fmt IS RECORD(
@@ -315,7 +315,7 @@ I'm not going to expand on what it does other than to say it converts Oracle typ
 a user specified manner while meeting the quoting needs for CSV output.
 
 Now with the main *fetch_rows* body:
-```sql
+```plsql
         IF p_header_row IN ('Y','y') THEN
             -- We need to put out a header row, so we have to engage in replication_factor shenanigans.
             -- This is in case FETCH is called more than once. We get and put to the store
@@ -331,7 +331,7 @@ If we need to produce a header row, then we need to know whether this is the fir
 or not. We use *xstore_get* here and *xstore_put* later to maintain our state between calls to *fetch_rows*.
 If we do not need a header row, set our flag variable to skip that.
 
-```sql
+```plsql
         -- get the data for this fetch 
         DBMS_TF.get_row_set(v_rowset, v_row_cnt, v_col_cnt);
 
@@ -352,7 +352,7 @@ We obtain the resultset data for this fetch, the number of rows and the number o
 We then set up the custom conversion configuration if needed. Note that *v_conv_fmts* is sparse
 and possibly empty.
 
-```sql
+```plsql
         IF v_fetch_pass = 0 THEN -- this is first pass and we need header row
             -- the first row of our output will get a header row plus the data row
             v_repfac(1) := 2;
@@ -380,7 +380,7 @@ We build the header row by joining the column names with the separator character
 
 Next we loop through the input rows building the corresponding output column (we only output a single column!).
 
-```sql
+```plsql
         FOR i IN 1..v_row_cnt
         LOOP
             v_out_row_i := v_out_row_i + 1;
@@ -400,7 +400,7 @@ Next we loop through the input rows building the corresponding output column (we
 If we generated a header row on this pass we submit our *replication_factor* table,
 then store our state for the next fetch pass.
 
-```sql
+```plsql
         IF p_header_row IN ('Y','y') THEN    -- save for possible next fetch call
             IF v_fetch_pass = 0 THEN
                 -- only on the first fetch 
@@ -414,7 +414,7 @@ then store our state for the next fetch pass.
 Notice that if we did not output a header row on this pass, we do not call *DBMS_TF.row_replication*.
 
 And finally we tell the engine about our single output column collection.
-```sql
+```plsql
         DBMS_TF.put_col(1, v_val_col);
 
     END fetch_rows;
@@ -423,7 +423,7 @@ And finally we tell the engine about our single output column collection.
 ## Example Usage
 
 An example including an ORDER BY clause for the PTF input:
-```sql
+```plsql
 WITH R AS (
     SELECT last_name||', '||first_name AS "Employee Name", hire_date AS "Hire Date", employee_id AS "Employee ID"
     FROM hr.employees

@@ -54,7 +54,7 @@ that contains multiple lines, each of which are a CSV record. Note that
 this is a full blown CSV parser that should handle any records that comply
 with RFC4180 (See https://www.loc.gov/preservation/digital/formats/fdd/fdd000323.shtml).
 
-```sql
+```plsql
     FUNCTION ptf(
         p_tab           TABLE
         ,p_table_name   VARCHAR2
@@ -90,7 +90,7 @@ To continue with my example from before I have a demo table from which to grab c
 
 Here is the query using the revised package:
 
-```sql
+```plsql
     WITH R AS (
         SELECT *
         FROM csv_to_table_pkg.split_clob_to_lines(
@@ -157,7 +157,7 @@ The resultset is as expected. Note the NULL date value on line 4. Here is a JSON
 As I mentioned this tracks the input line numbers including the blank lines that it discards.
 Here is an example of an error in the date conversion on the 4th row:
 
-```sql
+```plsql
     WITH R AS (
         SELECT *
         FROM csv_to_table_pkg.split_clob_to_lines(
