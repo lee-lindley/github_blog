@@ -1,6 +1,6 @@
 ---
 layout: post
-title: A PLSQL Lexer for Ruby/Rouge
+title: A Ruby/Rouge Lexer Class for Oracle PL/SQL
 date: 2022-03-20 21:30:00 +0500
 categories: [plsql, sql]
 tags: [oracle, sql, plsql, ruby, rouge, lexer, syntax-highlighting, github-pages, github, syntax, jekyll]
