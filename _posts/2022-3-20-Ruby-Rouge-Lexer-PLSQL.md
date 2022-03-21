@@ -94,8 +94,12 @@ CREATE OR REPLACE PACKAGE BODY sample_pkg
  -- quoted string with embedded newline
         c_strip_comments_regexp CONSTANT VARCHAR2(32767) := q'+[[:blank:]](--|#).*($|
 )+';
+$IF $$is_dummy_needed $then
         c_dummy                 CONSTANT VARCHAR2(30) := 'newline>
 <anotherline';
+        v_rec hr.employees%ROWTYPE;
+        v_dummy2 hr.employees.employee_id%type;
+$End
         
     BEGIN
     -- note that \n, \r and \t will be replaced if not preceded by a \
@@ -153,7 +157,7 @@ module Rouge
         OCIDURATION OCIINTERVAL OCILOBLOCATOR OCINUMBER OCIRAW OCIREF OCIREFCURSOR
         OCIROWID OCISTRING OCITYPE OF ON OPTION OR ORACLE ORADATA ORDER ORLANY ORLVARY
         OUT OVERRIDING PARALLEL_ENABLE PARAMETER PASCAL PCTFREE PIPE PIPELINED POLYMORPHIC
-        PRAGMA PRIOR PUBLIC RAISE RECORD RELIES_ON REM RENAME RESOURCE RESULT REVOKE ROWID
+        PRAGMA PRIOR PUBLIC RAISE RECORD RELIES_ON REM RENAME RESOURCE RESULT REVOKE ROWID 
         SB1 SB2 SELECT SEPARATE SET SHARE SHORT SIZE SIZE_T SPARSE SQLCODE SQLDATA
         SQLNAME SQLSTATE STANDARD START STORED STRUCT STYLE SYNONYM TABLE TDO THEN
         TRANSACTIONAL TRIGGER UB1 UB4 UNION UNIQUE UNSIGNED UNTRUSTED UPDATE VALIST
@@ -574,7 +578,7 @@ module Rouge
         FLOAT DOUBLE PRECISION REAL
         SDO_GEOMETRY SDO_TOPO_GEOMETRY SDO_GEORASTER
         REF ANYTYPE ANYDATA ANYDATASET XMLTYPE HTTPURITYPE XDBURITYPE DUBRITYPE
-        BOOLEAN
+        BOOLEAN PLS_INTEGER BINARY_INTEGER SIMPLE_FLOAT SIMPLE_INTEGER SIMPLE_DOUBLE SYS_REFCURSOR
         ))
       end
 
@@ -584,30 +588,52 @@ module Rouge
         rule %r/\s+/m, Text
         rule %r/--.*/, Comment::Single
         rule %r(/\*), Comment::Multiline, :multiline_comments
-        rule %r/[+-]?(?:(?:\.\d+(?:[eE][+-]?\d+)?)|\d+\.(?:\d+(?:[eE][+-]?\d+)?)?)/, Num::Float
-        rule %r/[+-]?\d+/, Num::Integer
         rule %r/q'(.)/i  do |m|
-            open = Regexp.escape(m[1])
+            #open = Regexp.escape(m[1])
             close = Regexp.escape(delimiter_map[m[1]] || m[1])
+            # the opening q'X
             token Operator
             push do
-                rule %r/#{close}'/, Operator, :pop!
                 rule %r/(?:#{close}[^']|[^#{close}]'|[^#{close}'])+/m, Str::Other
+                rule %r/#{close}'/, Operator, :pop!
             end
         end
         rule %r/'/, Operator, :single_string
+        #
         # A double-quoted string refers to a database object in our default SQL
         rule %r/"/, Operator, :double_string
-        #rule %r/`/, Name::Variable, :backtick
-        # longer ones come first
+
+        ### we do not use backticks in Oracle. I do not know the rules for other sql engines
+        ###rule %r/`/, Name::Variable, :backtick
+        
+        rule %r/[+-]?(?:(?:\.\d+(?:[eE][+-]?\d+)?)|\d+\.(?:\d+(?:[eE][+-]?\d+)?)?)/, Num::Float
+        rule %r/[+-]?\d+/, Num::Integer
+        
+        rule %r/%(?:TYPE|ROWTYPE)\b/i, Name::Attribute
+
+        # longer ones come first on purpose!
         rule %r/=>|\|\||\*\*|<<|>>|\.\.|<>|[:!~^<>]=|[-+%\/*=<>@&!^\[\]]/, Operator
+        rule %r/(NOT|AND|OR|LIKE|BETWEEN|IN)(\s)/im do
+            groups Operator, Text
+        end
+        rule %r/(IS)(\s+)(?:(NOT)(\s+))?(NULL\b)/im do
+            groups Operator, Text, Operator, Text, Operator
+        end
+
         rule %r/[;:()\[\],.]/, Punctuation
 
-        rule %r/function|procedure|type/i, Keyword::Reserved, :function_decl
+        # this madness is to keep the word "replace" from being treated as a builtin function in this context
+        rule %r/(?:(replace)(\s+))?(package|function|procedure|type)(?:(\s+)(body))?(\s+)(\w[\w\d\$]*)/im do
+            groups Keyword::Reserved, Text, Keyword::Reserved, Text, Keyword::Reserved, Text, Name
+        end
+
+        rule %r/(\$(?:IF|THEN|ELSE|ELSIF|ERROR|END|(?:\$\w+)))(\s+)/im do
+            groups Comment::Preproc, Text
+        end
 
         rule %r/\w[\w\d\$]*/ do |m|
           if self.class.keywords_type.include? m[0].upcase
-            token Keyword::Type
+            token Keyword::Type 
             #Name::Builtin
           elsif self.class.keywords_func.include? m[0].upcase
             token Name::Function
@@ -623,7 +649,7 @@ module Rouge
       end
 
       state :multiline_comments do
-        rule %r/([*][^\/]|[^*])+/, Comment::Multiline
+        rule %r/([*][^\/]|[^*])+/m, Comment::Multiline
         rule %r([*]\/), Comment::Multiline, :pop!
       end
 
@@ -639,25 +665,18 @@ module Rouge
         rule %r/\\./, Str::Escape
         rule %r/''/, Str::Escape
         rule %r/'/, Operator, :pop!
-        rule %r/[^\\']+/, Str::Single
+        rule %r/[^\\']+/m, Str::Single
       end
 
       state :double_string do
         rule %r/\\./, Str::Escape
         rule %r/""/, Str::Escape
         rule %r/"/, Operator, :pop!
-        rule %r/[^\\"]+/, Name::Variable
+        rule %r/[^\\"]+/m, Name::Variable
       end
 
-      state :function_decl do
-        rule %r/\s+/m, Text
-        rule %r/\w[\w\d\$]*/m, Name, :pop!
-      end
 
     end
   end
 end
 ```
-
-
-
