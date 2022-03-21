@@ -61,7 +61,8 @@ but I followed the guidelines they provided, so we will see.
 
 ```plsql
 SELECT e.first_name AS "First Name", e.last_name AS "Last Name"
-    , d.department_name AS "Department Name"
+    , d.department_name AS "Department 
+Name"
 FROM hr.employees e
 JOIN hr.departments d
     ON e.department_id = d.department_id
@@ -69,7 +70,10 @@ WHERE e.first_name = 'Bruce' AND e.last_name = 'Lee'
 ORDER BY d.department_name
 ;
 
-CREATE OR REPLACE PACKAGE sample_pkg
+CREATE OR 
+ REPLACE 
+  PACKAGE 
+   sample_pkg
     PROCEDURE transform_perl_regexp(p_re VARCHAR2)
     RETURN VARCHAR2
     DETERMINISTIC
@@ -90,6 +94,9 @@ CREATE OR REPLACE PACKAGE BODY sample_pkg
  -- quoted string with embedded newline
         c_strip_comments_regexp CONSTANT VARCHAR2(32767) := q'+[[:blank:]](--|#).*($|
 )+';
+        c_dummy                 CONSTANT VARCHAR2(30) := 'newline>
+<anotherline';
+        
     BEGIN
     -- note that \n, \r and \t will be replaced if not preceded by a \
     -- \\n and \\t will not be replaced. Unfortunately, neither will \\\n or \\\t.
