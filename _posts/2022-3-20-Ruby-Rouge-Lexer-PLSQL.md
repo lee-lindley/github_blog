@@ -13,7 +13,7 @@ It is every bit as confusing as it sounds, but strangely familiar if you have be
 like this for a while.
 
 The nice thing about it is that I was already using *Markdown* to build my pages and converting them to
-HTML with *pandoc*. It was messy and cumbersome, so swithing to *Github Pages* seemed like a good idea.
+HTML with *pandoc*. It was messy and cumbersome, so switching to *Github Pages* seemed like a good idea.
 As with anything to do with HTML, CSS and web page development, **nothing is ever easy**.
 
 Github has decent support for SQL syntax highlighting if you use the fence construct:
@@ -107,7 +107,7 @@ CREATE OR REPLACE PACKAGE BODY sample_pkg
             )
             , q'{(^|[^\\])\\n}', '\1'||CHR(10), 1, 0       -- replace \n with newline character value so it works like in perl
           )
-          , q'('(^|[^\\])\\r)', '\1'||CHR(13), 1, 0         -- replace \r with CR character value so it works like in perl
+          , q'((^|[^\\])\\r)', '\1'||CHR(13), 1, 0         -- replace \r with CR character value so it works like in perl
         )
       ;
 
