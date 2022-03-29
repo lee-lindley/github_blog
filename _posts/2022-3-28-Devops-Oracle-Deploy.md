@@ -109,7 +109,7 @@ of just one as shown here.
 
 ```plsql
 BEGIN
-    APP_CSV_PKG.create_ptt_csv(q'{"ID","MSG","DT"
+    APP_CSV_PKG.create_ptt_csv(TO_CLOB(q'{"ID","MSG","DT"
 1,"testing...","03/26/2022"
 2,"testing...","03/27/2022"
 3,"testing...","03/28/2022"
@@ -120,7 +120,7 @@ BEGIN
 8,"testing...","04/02/2022"
 9,"testing...","04/03/2022"
 10,"testing...","04/04/2022"
-}'
+}')
 );
 END;
 /
