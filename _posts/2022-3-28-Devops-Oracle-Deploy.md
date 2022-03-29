@@ -83,7 +83,7 @@ build deployment scripts that run in *SQL\*PLUS* handling relatively large amoun
 data as Comma Separated Value (CSV) records efficiently. 
 Not as efficiently as using *sqlldr*, but good enough. 
 
-From the documentation at [plsql_utilities/app_csv_pkg](https://github.com/lee-lindley/plsql_utilities/app_csv_pkg)...
+From the documentation at [plsql_utilities/app_csv_pkg](https://github.com/lee-lindley/plsql_utilities/tree/main/app_csv_pkg)...
 
 Read the data from a table (with an optional WHERE clause) and convert it
 into a CSV CLOB with a header row. Break the CLOB into a set of quoted
@@ -94,7 +94,7 @@ string literals. Generate a script that
 
 We call the deployment generator:
 
-```sql
+```plsql
 SELECT APP_CSV_PKG.gen_deploy_merge(
     p_table_name    => 'MY_TABLE_NAME'
     ,p_key_cols     => 'ID'
@@ -107,7 +107,7 @@ if the size of the CSV CLOB holding the records was greater than 32767,
 it would be represented by a concatenated set of quoted literals instead
 of just one as shown here.
 
-```sql
+```plsql
 BEGIN
     APP_CSV_PKG.create_ptt_csv(q'{"ID","MSG","DT"
 1,"testing...","03/26/2022"
