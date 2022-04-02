@@ -83,7 +83,7 @@ a AS (
 FROM a x
 ```
 This also ran for 6 minutes on my Intel NUC database. We haven't ruled out that the object could play a
-part, but we know that the function call to *split_csv* is a problem. 
+part, but we know that the function call *split_csv* is a problem. 
 
 If you are thinking about using
 a *UDF* pragma on that puppy (*split_csv*), I could not 
@@ -108,7 +108,7 @@ From the package header:
     FUNCTION split_lines_to_fields(
         p_curs          t_curs_csv_row_rec
         ,p_separator    VARCHAR2    DEFAULT ','
-	    ,p_strip_dquote VARCHAR2    DEFAULT 'Y' -- also unquotes \" and "" pairs within the field to just "
+        ,p_strip_dquote VARCHAR2    DEFAULT 'Y' -- also unquotes \" and "" pairs within the field to just "
         ,p_keep_nulls   VARCHAR2    DEFAULT 'Y'
     ) 
     RETURN t_arr_csv_fields_rec
@@ -122,7 +122,7 @@ and from the package body:
     FUNCTION split_lines_to_fields(
         p_curs          t_curs_csv_row_rec
         ,p_separator    VARCHAR2    DEFAULT ','
-	    ,p_strip_dquote VARCHAR2    DEFAULT 'Y' -- also unquotes \" and "" pairs within the field to just "
+        ,p_strip_dquote VARCHAR2    DEFAULT 'Y' -- also unquotes \" and "" pairs within the field to just "
         ,p_keep_nulls   VARCHAR2    DEFAULT 'Y'
     ) 
     RETURN t_arr_csv_fields_rec
@@ -146,7 +146,7 @@ and from the package body:
     END split_lines_to_fields
     ;
 ```
-The documentation never shows a Bulk Collect in these chained pipelines and the descritpions
+The documentation never shows a Bulk Collect in the chained pipeline examples, and the descriptions
 it uses and other hints make me believe it is not needed. I wish it was
 more explicit.
 
@@ -208,13 +208,14 @@ WITH a AS (
 FROM a X
 ```
 
-This also ran in 23 seconds.
+This also ran in 23 seconds. I prefer the object way better than the WITH FUNCTION way, but if you don't
+already have an object wrapped around your array with a handy method, the WITH FUNCTION is just dandy.
 
 # Conclusion
 
 Calls to a PL/SQL function in a SELECT list can lead to significant cost via context switching. This is
-well known and there are several caching strategies (DETERMINISTIC, RESULT_CACHE, Scalar Subquery) to mitigate
-it. Using a Pipelined Table Function chain as I did here is also a viable mitigation strategy and I believe
+well known, and there are several caching strategies (DETERMINISTIC, RESULT_CACHE, Scalar Subquery) to mitigate
+it. Using a Pipelined Table Function chain as I did here is also a viable mitigation strategy, and I believe
 the appropriate one for this use case.
 
 My concern that object construction and simple method function calls in the SQL engine could context
@@ -222,10 +223,10 @@ switch seems to be unfounded. I re-read the Object Relational Developer Guide an
 ways looking for more information about how object methods are implemented, but it is not clearly stated.
 They seem to be neither fish nor fowl, SQL engine nor PL/SQL engine.
 
-I am wondering why using an object type is not another mitigation strategy for PL/SQL Function context switching,
-at least when the method does not need to call anything other than builtin functions? Why could
-one not simply define a dummy object type with a static function instead of a PL/SQL program unit? Would
-that avoid the context switch?
+I am wondering why using an object type is not touted as another mitigation strategy for PL/SQL Function context switching
+(at least for when the method does not need to call anything other than builtin functions)? 
+I realize we have WITH FUNCTIONs, UDF pragma, and with Oracle 21c, SQL Macros,
+but it would be nice to know if Object methods are an alternative.
 
 I may explore this as a context switching mitigation strategy another day.
 
@@ -234,10 +235,10 @@ I may explore this as a context switching mitigation strategy another day.
 
 If you have a use case that calls for the ultimate in performance (this one does not, but
 I happened to try this early in my analysis), you can get down and dirty with DBMS_SQL
-and I believe what is called "Method 4" dynamic SQL. This is because you have a variable
+and I believe what is called "Method 4" dynamic SQL. That classification is because we have a variable
 number of bind elements.
 
-Unlike the other examples, this one is the entire procedure that creates a
+Unlike the other examples, this one shows the entire procedure that creates a
 Private Temporary Table (PTT) and populates it from the CSV Clob.
 
 The best I could achieve with the code shown in the article was 23 seconds. This version
@@ -245,11 +246,11 @@ operates in 19 seconds. It isn't worth the complexity for this package, but it i
 to know how to do it for the rare occassions when you might need to squeeze out
 that last little bit of efficiency.
 
-The first part is mostly the same as for the other variations. It parses the first row of the CLOB to
-get the column names and creates the PTT.
+The first part is mostly the same as the code I didn't show you for the other variations. 
+It parses the first row of the CLOB to get the column names and creates the PTT.
 
 ```plsql
-	PROCEDURE create_ptt_csv (
+    PROCEDURE create_ptt_csv (
          --
          -- creates private temporary table "ora$ptt_csv" with columns named in first row of data (case preserved).
          -- from a CLOB containing CSV lines.
@@ -258,7 +259,7 @@ get the column names and creates the PTT.
 	     p_clob         CLOB
 	    ,p_separator    VARCHAR2    DEFAULT ','
 	    ,p_strip_dquote VARCHAR2    DEFAULT 'Y' -- also unquotes \" and "" pairs within the field to just "
-	) IS
+    ) IS
         v_cols          perlish_util_udt; -- for manipulating column names into SQL statement
         v_sql           CLOB;
         v_first_row     VARCHAR2(32767);
@@ -330,11 +331,11 @@ executes a DBMS_SQL INSERT cursor bound to those arrays. Pretty slick, if a litt
         --
         v_sql := 'INSERT INTO ora$ptt_csv(
 '
-        ||v_cols.map('"$_"').join(', ')
+        ||v_cols.map('"$_"').join(', ')             -- the column names in dquotes
         ||'
 ) VALUES (
 '
-        ||v_cols.map(':$##index_val##').join(', ') -- :1, :2, :3, etc...
+        ||v_cols.map(':$##index_val##').join(', ')  -- :1, :2, :3, etc... bind placeholders
         ||'
 )';
         DBMS_OUTPUT.put_line(v_sql);
@@ -355,7 +356,7 @@ executes a DBMS_SQL INSERT cursor bound to those arrays. Pretty slick, if a litt
                 END LOOP;
             END LOOP;
 
-            IF v_last_row_cnt != v_rows.COUNT THEN -- will be true on first loop iteration
+            IF v_last_row_cnt != v_rows.COUNT THEN -- will be true on first loop iteration and maybe last
                 v_last_row_cnt := v_rows.COUNT;
                 -- bind each column array. v_vals has an array for every column
                 FOR j IN 1..v_col_cnt
