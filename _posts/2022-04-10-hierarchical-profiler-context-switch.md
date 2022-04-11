@@ -326,6 +326,6 @@ memory space.
 
 I'm now at a point where I need to revisit my understanding of what context switch means for the
 SQL/PL_SQL interface. It isn't like I haven't been reading everything I could find on the subject
-for the last two weeks, yet somehow, exactly what goes on here has alluded me.
+for the last two weeks, yet somehow, exactly what goes on here has eluded me.
 
 Stay tuned.
