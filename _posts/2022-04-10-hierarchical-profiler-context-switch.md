@@ -122,14 +122,14 @@ original full package at [https://github.com/lee-lindley/plsql_utilities](https:
 ```plsql
     PROCEDURE split_csv (
          po_arr OUT NOCOPY  &&d_arr_varchar2_udt.
-	    ,p_s                CLOB
-	    ,p_separator        VARCHAR2    DEFAULT ','
-	    ,p_keep_nulls       VARCHAR2    DEFAULT 'N'
-	    ,p_strip_dquote     VARCHAR2    DEFAULT 'Y' -- also unquotes \" and "" pairs within the field to just "
+        ,p_s                CLOB
+        ,p_separator        VARCHAR2    DEFAULT ','
+        ,p_keep_nulls       VARCHAR2    DEFAULT 'N'
+        ,p_strip_dquote     VARCHAR2    DEFAULT 'Y' -- also unquotes \" and "" pairs within the field to just "
         ,p_expected_cnt     NUMBER      DEFAULT 0 -- will get an array with at least this many elements
-	) 
-	-- when p_s IS NULL, returns initialized collection with COUNT=0
-	IS
+    ) 
+    -- when p_s IS NULL, returns initialized collection with COUNT=0
+    IS
         v_str                   VARCHAR2(32767);    -- individual parsed values cannot exceed 4000 chars
         v_i                     BINARY_INTEGER := 0;
         v_pos                   BINARY_INTEGER;
@@ -266,7 +266,7 @@ SqlDeveloper can show it to you including the HTML report it causes to be create
 That is convenient and I use it, but for this article I teased out the data I wanted to show.
 
 
-```plsq
+```plsql
 with a as (
 select function, namespace, sum(subtree_elapsed_time) as subtree_elapsed_time, sum(function_elapsed_time) as function_elapsed_time
 from dbmshp_function_info
