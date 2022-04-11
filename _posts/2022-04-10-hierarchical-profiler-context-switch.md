@@ -26,9 +26,9 @@ Remember to recompile with debug any of your packages and types that are called 
 for them. Once you get your feet wet, you can read the Oracle 
 document *Database Development Guide*, Chapter 15, *Using the PL/SQL Hierarchical Profiler*.
 
-# Chained PIEPLINED Table Functions and Bulk Fetching
+# Chained PIEPLINED Table Functions and Bulk Fetch
 
-My working solution to the context switch problem used chained PIPELINED Table functions. Per what I perceived the
+My working solution used chained PIPELINED Table functions. Per what I perceived the
 documetation to be implying (without ever coming out and saying it), I implemented the function that reads the cursor
 from the chain (not the first entry in the chain) without any bulk collection/array processing. The profiler
 showed that function taking 3.1% of the execution time.
@@ -92,29 +92,32 @@ FROM a X';
 ```
 
 The *perlish_util_udt* constructor calls *app_csv_pkg.csv*. Both are called directly from PL/SQL in the first
-variant, but from SQL in the second. Both were compiled with the following settings for the initial timed run:
+variant, but from SQL in the second. That is where we focus for this analysis.
+
+Both were compiled with the following settings for the initial timed run:
 
 ```plsql
 ALTER SESSION SET plsql_code_type = NATIVE;
 ALTER SESSION SET plsql_optimize_level=3;
 ```
 
-Using a 10,766 row CLOB input file the total run times are
+Using a 10,766 row, 20 column CLOB input file the total run times are
 
 | Variant | Run Time|
 |:--|--:|
 |PL/SQL|9.0|
 |SQL|94.9|
 
-If you read the prior article you will notice these times do not line up. There were multipiple
-optimizations to the code since then, most notably using *REGEXP_INSTR* to parse the CSV rows
-rather than *REGEXP_SUBSTR*. There is still a large percentage disparity between the two versions.
+If you read the prior article you will notice these times do not foot to those. There were multiple
+optimizations to the code since that article, most notably using *REGEXP_INSTR* to parse the CSV rows
+rather than *REGEXP_SUBSTR*. There is still a large percentage disparity between the two variants,
+though both are much faster now.
 
 # Running with Hierarchical Profile Enabled
 
 The *app_csv_pkg.split_csv* procedure is modifed here to support additional data capture. 
 You can see the 
-full package at [https://github.com/lee-lindley/plsql_utilities](https://github.com/lee-lindley/plsql_utilities).
+original full package at [https://github.com/lee-lindley/plsql_utilities](https://github.com/lee-lindley/plsql_utilities).
 
 ```plsql
     PROCEDURE split_csv (
@@ -317,7 +320,7 @@ If the only discrepancies were in the regular expression engine, I would feel mu
 beast could be a weirdo. But we have anomalous behavior in the simple substring operation as well (SPLIT_CSV.L_SUBSTR)
 and that has nothing to do with the regular expression engine.
 
-What the problem operations all have in common is reading and/or writing character data. It may be
+What the problem operations all have in common is reading and/or writing character data in memory. It may be
 that each of these operations incur the context switch penalty as they negotiate the "other"
 memory space.
 
