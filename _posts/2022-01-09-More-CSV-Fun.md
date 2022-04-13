@@ -1,6 +1,7 @@
 ---
 layout: post
 title: More CSV Fun - Turn CSV into SQL Resultset
+exerpt: "A pattern for turning CSV data into an Oracle Resultset you can use in a query or DML."
 date: 2022-01-9 20:30:00 +0500
 categories: [oracle, sql, plsql, perl]
 tags: [oracle, sql, plsql, perl, regexp]

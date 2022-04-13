@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Perl Like Operations in PL/SQL
+exerpt: "Transforming lists and hacking strings from lists is a staple of Perl programming. PL/SQL makes it more challenging than it needs to be. Presenting a better way with the <i>perlish_util_udt</i> Oracle Object type."
 date: 2022-01-02 20:30:00 +0500
 categories: [oracle, plsql, perl]
 tags: [oracle, plsql, perl, regexp]

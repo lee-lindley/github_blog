@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Sql Tuning for Multiple Use Cases
+exerpt: "Using parameterized hints in Dynamic SQL to satisfy multiple use cases with one set of code."
 date: 2021-10-17 20:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql, tuning]

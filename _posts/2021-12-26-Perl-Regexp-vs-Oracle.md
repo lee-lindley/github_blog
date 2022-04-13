@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Perl REgexp vs Oracle
+exerpt: "Making Oracle Regular Expression limitations suck a little less with a transform that lets you write the regex with Perl extended (comment) syntax."
 date: 2021-12-26 20:30:00 +0500
 categories: [oracle, plsql]
 tags: [oracle, plsql]

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Inline External Tables for CSV Load
+exerpt: "If you can deliver CSV data to an Oracle Directory, you can parse it without deploying any code by using an <i>Inline External Table</i>"
 date: 2022-01-24 20:30:00 +0500
 categories: [oracle, sql, plsql, perl]
 tags: [oracle, sql, plsql, csv, perl]

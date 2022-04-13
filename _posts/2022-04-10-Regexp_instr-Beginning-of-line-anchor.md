@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Oracle REGEXP_INSTR and Beginning of Line Anchor
+exerpt: "REGEXP_INSTR *position* parameter gives non-intuitive behavior for '^' beginning of line anchor."
 date: 2022-04-10 11:45:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql, regexp]

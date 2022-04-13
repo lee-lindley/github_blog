@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Install Oracle Enterprise Linux and Oracle Database on a Dual Boot Windows 10 Machine
+exerpt: "Way more detail than you could possibly want unless you are trying to install Oracle Linux and Oracle database."
 date: 2020-05-09 10:00:00 +0500
 categories: [linux, oracle] 
 tags: [oracle, linux, installation, windows 10]

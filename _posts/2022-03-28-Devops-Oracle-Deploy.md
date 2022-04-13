@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Devops Data Deployment for Oracle
+exerpt: "Is your Devops Continuous Improvement deployment tool for Oracle cramping your style? I present one way of making it better for the case where you need to deploy data in addition to code."
 date: 2022-03-28 19:00:00 +0500
 categories: [plsql, sql, oracle]
 tags: [oracle, sql, plsql, devops, deploy, CLOB]

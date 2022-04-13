@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Oracle Object Types as Application Interface
+exerpt: "A design pattern for serving Web application data consumers using Oracle Objects and collections as a hierarchical payload."
 date: 2021-09-9 20:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql, object_types]

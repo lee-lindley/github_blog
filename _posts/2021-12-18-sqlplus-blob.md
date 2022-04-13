@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Extracting BLOB from Oracle with Sqlplus
+exerpt: "SQL*Plus and BLOB data. Yes you can."
 date: 2021-12-18 20:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql, blob, sqlplus]

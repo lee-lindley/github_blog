@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Cost of UDT Object Methods in SQL
+exerpt: "A journey to optimize some unexpectedly slow code with Chained Pipeline Row Functions."
 date: 2022-04-02 12:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql, objects, user-defined-type-objects]

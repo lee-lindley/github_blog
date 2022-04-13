@@ -6,11 +6,17 @@ layout: default
   <h1>{{ site.title }}</h1>
   <hr />
 
-  <ol class="posts">
+    <table class="index-table">
     {% for post in paginator.posts %}
-      <li><a href="{{ post.url }}">{{ post.title }}</a> &raquo; <i><span>{{ post.date | date_to_string }}</span></i></li>
+    <tr>
+        <td><i>{{ post.date | date: "%m/%d/%Y" }}</i></td>
+        <td style="font-size: x-large"><a href="{{ post.url }}">{{ post.title }}</a></td>
+        <tr>
+        <td></td><td style="font-size: medium">{{ post.exerpt }}</td>
+        </tr>
+    </tr>
     {% endfor %}
-  </ol>
+    </table>
 
   <!-- Pagination links -->
   {% if paginator.total_pages > 1 %}

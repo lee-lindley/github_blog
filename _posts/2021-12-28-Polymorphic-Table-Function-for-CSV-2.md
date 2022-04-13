@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Polymorphic Table Function for CSV (take 2)
+exerpt: "Continuing the journey with PTFs for parsing a CSV CLOB."
 date: 2021-12-28 20:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql]

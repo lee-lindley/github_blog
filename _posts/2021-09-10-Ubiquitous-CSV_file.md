@@ -1,6 +1,7 @@
 ---
 layout: post
 title: The Ubiquitous CSV File
+exerpt: "The beginning of my search for the holy grail of CSV data generation and parsing."
 date: 2021-09-10 20:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql, csv]

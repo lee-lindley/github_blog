@@ -1,6 +1,7 @@
 ---
 layout: post
 title: HTML Table Markup in Oracle
+exerpt: "A small enhancement to the venerable <i>DBMS_XMLGEN/XLSTYPE</i> technique for turning a query resultset into a HTML table."
 date: 2022-01-16 20:30:00 +0500
 categories: [oracle, plsql, html]
 tags: [oracle, plsql, html, table, css, xlst, dbms_xmlgen, xlstype]

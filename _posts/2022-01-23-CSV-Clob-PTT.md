@@ -1,6 +1,7 @@
 ---
 layout: post
 title: CSV Clob and Private Temporary Table
+exerpt: "Converting CSV data into an Oracle resultset via Private Temporary Table (PTT)"
 date: 2022-01-23 20:30:00 +0500
 categories: [oracle, sql, plsql, perl]
 tags: [oracle, sql, plsql, csv, perl]

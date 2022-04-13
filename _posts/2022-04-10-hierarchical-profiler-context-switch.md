@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Profiling PL/SQL to Examine Context Switch Penalty
+exerpt: "A deeper dive into the performance cost of calling a PL/SQL function from SQL. We use the PL/SQL Hierarchical Profiler to explore whether <b>context switching</b> is the villain for our CSV parser. Spoiler alert: it is not clear."
 date: 2022-04-10 21:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql, profiler]

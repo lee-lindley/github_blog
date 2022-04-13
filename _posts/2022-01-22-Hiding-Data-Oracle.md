@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Protecting/Hiding Data in Oracle
+exerpt: "Using Oracle Fine Grained Access Control to implement a protected datastore for <i>ssh</i> private keys"
 date: 2022-01-22 20:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql, ssh, sftp, dbms_rls]

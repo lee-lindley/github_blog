@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Polymorphic Table Function (PTF) for CSV (take 3)
+exerpt: "My journey with PTFs has us more closely aligning with established patterns plus an extended explanation of <i>Replication Factor</i> and how to use it. This article walks through the parts of a PTF with detail and explanation I wish I had seen while I was learning."
 date: 2021-12-31 20:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql]

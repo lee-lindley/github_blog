@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Why do I need Inline PL/SQL Methods?
+exerpt: "<i>WITH</i> clause Functions and uses you may not have considered."
 date: 2021-09-25 20:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql]

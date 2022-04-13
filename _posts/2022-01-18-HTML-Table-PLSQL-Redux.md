@@ -1,6 +1,7 @@
 ---
 layout: post
 title: HTML Table Markup Redux
+exerpt: "HTML and CSS suck once again, but we can overcome."
 date: 2022-01-18 20:30:00 +0500
 categories: [oracle, plsql, html]
 tags: [oracle, plsql, html, table, css, xlst, dbms_xmlgen, xlstype]

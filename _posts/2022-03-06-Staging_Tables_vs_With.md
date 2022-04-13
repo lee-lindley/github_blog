@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Staging Tables vs Single SQL
+exerpt: "One gigantic INSERT query or multiple small ones? Why choose when you can break the big one up into Common Table Expressions via the SQL <i>WITH</i> clause? Of course there are exceptions. Let's explore some."
 date: 2022-03-06 20:30:00 +0500
 categories: [oracle, sql]
 tags: [oracle, sql, tuning]

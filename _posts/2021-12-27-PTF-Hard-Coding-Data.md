@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Polymorphic Table Function to the Rescue?
+exerpt: "I get my feet wet with a Polymorphic Table Function to parse CSV data from a CLOB."
 date: 2021-12-27 20:30:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql]
