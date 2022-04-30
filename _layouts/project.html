@@ -18,7 +18,6 @@ layout: default
     {% endfor %}
 
     <div class="projects">
-      {% include project_tags.html %}
       
       {% for i in site.data.projects %}
       <div class="project-item project-outer" data-tags='{{ i.tags | jsonify | downcase }}'>
