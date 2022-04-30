@@ -7,7 +7,8 @@ disqus_shortname: leelindleyscratchpad
 google_analytics:
 
 enableTags: true
-tagarray: [oracle, linux, perl, sql, plsql, pl/sql, object_types]
+#tagarray: [oracle, linux, perl, sql, plsql, pl/sql, object_types]
+tagarray: [CLOB, DBD, DBI, RHL, blob, css, csv, dbms_rls, dbms_xmlgen, deploy, devops, github, github-pages, html, installation, jekyll, lexer, linux, object_types, objects, oracle, perl, plsql, profiler, regexp, rouge, ruby, sftp, sql, sqlplus, ssh, syntax, syntax-highlighting, table, tuning, user-defined-type-objects, vim, windows, xlst, xlstype]
 
 exclude: [Rakefile]
 
