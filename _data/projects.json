@@ -2,21 +2,21 @@
 
 	{
 		"name": "vim_plsql_syntax",
-		"image": "",
+		"image": "screenshot_select_fold.gif",
 		"url": "https://github.com/lee-lindley/vim_plsql_syntax",
 		"date": "Apr 2022",
 		"tags": ["vim","PL/SQL","PLSQL","SQL","Oracle","syntax","syntax-highlighting"]
 	},
 	{
 		"name": "plsql_utilities",
-		"image": "",
+		"image": "plsql_utilities_component_diagram.gif",
 		"url": "https://github.com/lee-lindley/plsql_utilities",
 		"date": "Sep 2021",
 		"tags": ["PL/SQL","PLSQL","SQL","Oracle"]
 	},
 	{
 		"name": "app_csv_udt",
-		"image": "",
+		"image": "app_csv_use_case.gif",
 		"url": "https://github.com/lee-lindley/app_csv_udt",
 		"date": "Aug 2021",
 		"tags": ["csv","PL/SQL","PLSQL","SQL","Oracle"]
