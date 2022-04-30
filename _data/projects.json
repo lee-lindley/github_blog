@@ -23,7 +23,7 @@
 	},
 	{
 		"name": "app_html_table_pkg",
-		"image": "",
+		"image": "fancy_shenanigans.gif",
 		"url": "https://github.com/lee-lindley/app_html_table_pkg",
 		"date": "Jan 2022",
 		"tags": ["PL/SQL","PLSQL","SQL","Oracle","dbms_xmlgen","html","xlst","xlstype"]
