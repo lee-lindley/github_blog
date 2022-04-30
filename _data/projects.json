@@ -31,14 +31,14 @@
 	{
 		"slug": "PdfGen",
 		"name": "PdfGen",
-		"image": "",
+		"image": "test0_pg1.png",
 		"url": "https://github.com/lee-lindley/PdfGen",
 		"date": "Jul 2021",
 		"tags": ["PL/SQL","PLSQL","PDF","Oracle","Report Generator"]
 	},
 	{
 		"name": "html_email",
-		"image": "",
+		"image": "email_snapshot.png",
 		"url": "https://github.com/lee-lindley/html_email",
 		"date": "Aug 2021",
 		"tags": ["PL/SQL","PLSQL",Oracle","html"]
