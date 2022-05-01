@@ -87,7 +87,7 @@ Given that you have a procedure that can produce a *BLOB* or *CLOB* with everyth
 on the client, how can we get it from the database? Let's walk through an example.
 
 This first part is boilerplate you will have in all of your scripts unless you have 
-refactored it into a connection object, perhpas one that handles the password management.
+refactored it into a connection object, perhaps one that handles the password management.
 
 We need the Oracle Type definitions, thus the extra argument to use DBD::Oracle.
 
@@ -149,12 +149,12 @@ $sth->bind_param_inout( ':rec_count', \$rec_count, 0);
 $sth->execute;
 ```
 After the *execute*, *$rec_count* has the number of rows which we can report and *$clob* has a *LOB*
-locator (which is only good to use during this transaction; a *commit* or *rollback* destroys the unerlying *LOB*.)
+locator (which is only good to use during this transaction; a *commit* or *rollback* destroys the underlying *LOB*.)
 
 Now we write out the data. We are writing to STDOUT here, but you could have opened
 a named file and be writing to that.
 
-Rather than bring back the entire clob into one huge chunk of memory, we will read and 
+Rather than bring back the entire CLOB into one huge chunk of memory, we will read and 
 write it in pieces. Each of these is a round trip to the database so do not make them
 too small, but neither do we want to use so much memory on both sides of the connection
 that it is an issue. Just like where Oracle has a rule of thumb that 100 rows is a good
