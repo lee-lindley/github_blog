@@ -53,7 +53,7 @@ may need to install your own *Perl* and add *DBD::Oracle* to that. Perhaps the U
 # Running Data Through Perl
 
 *Perl* is fantastic as a scripting language. But like all scripting languages it has some overhead costs.
-It isn't the bytecode which is pretty efficient. The overhead is in the data structures which are fat pigs.
+It isn't the bytecode, which is pretty efficient. The overhead is in the data structures which are fat pigs.
 If you look at the underlying structure of a *Perl* *scalar* variable, you will find multiple pointer and length
 members. For example it has a place to store an integer, a floating point number and a string among others.
 There is a lot of wasted space for any given scalar object.
@@ -167,7 +167,7 @@ while(1) {
 
 $dbh->rollback; # to end the transaction concerning temp lob locator and freeing it so perl destructor doesn't complain
 ```
-I'm not going to print out the results, but this works just fine. My sample query is not even bigger than
+I'm not going to print out the results, but this works just fine. My sample query output is not bigger than
 the chunk size, so it didn't loop, but it will work.
 
 # Conclusion
@@ -175,6 +175,6 @@ the chunk size, so it didn't loop, but it will work.
 I've waved my hands around a lot and said you can get *CLOB* and *BLOB* data out on the client. I showed it
 with *sqlplus* and *sqlCL*. I have used Tom Kyte's *flat* utility for years (though the security mavens
 don't want me near a C compiler and Devops won't give me a deploy method for it). It was time to put up
-some proof that we can do it all with a scripting language efficiently too.
+some proof that we can do it all with a scripting language efficiently too. Here ya' go.
 
 Hope this helps.
