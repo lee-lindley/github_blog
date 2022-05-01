@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Intalling Perl DBD::Oracle on RHL
+title: Installing Perl DBD::Oracle on RHL
 exerpt: "Installing Perl DBD::Oracle has over the years been a heavy lift. It's still not a button push, but it has gotten better."
 date: 2022-04-28 21:30:00 +0500
 categories: [oracle, perl, linux]
