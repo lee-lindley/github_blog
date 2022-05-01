@@ -42,28 +42,33 @@ they work.
 That said, it has gotten easier as I demonstrated 
 in [Installing Perl DBD::Oracle on RHL](https://lee-lindley.github.io/oracle/perl/linux/2022/04/28/Perl-DBD-Oracle-RHL.html).
 There is a good chance your Unix Admin isn't allowed to alter the vendor *Perl*. If that is the case you may
-may need to install your own *Perl* and add *DBD::Oracle* to that. Perhaps the Unix admin can do that for you.
+need to install your own *Perl* and add *DBD::Oracle* to that. Perhaps the Unix admin can do that for you.
 
 > I don't mean to make light of this, but if you are going to have a useful scripting environment, whether it be
 > *Perl*, *Python*, or something else, at some point the security mavens and corporate rule makers need to give
 > you one and it needs to have the database connect libraries linked in. "Of course that's true" you are thinking.
 > Surprise! You may find the security mavens and IT infrastructure folk are not sympathetic to your need
-> for a decent scripting environment with a built-in Oracle connection library on the ETL server.
+> for a decent scripting environment with a built-in Oracle connection library on the ETL server. At one company I
+> encountered a mindset that shell and *sqlplus*, along with a vendor ETL tool, were all you need. It was a
+> large, sophisticated organization too. They were responding to pressures from senior management that resulted in
+> what I would call unintended consequences.
 
 # Running Data Through Perl
 
 *Perl* is fantastic as a scripting language. But like all scripting languages it has some overhead costs.
 It isn't the bytecode, which is pretty efficient. The overhead is in the data structures which are fat pigs.
 If you look at the underlying structure of a *Perl* *scalar* variable, you will find multiple pointer and length
-members. For example it has a place to store an integer, a floating point number and a string among others.
-There is a lot of wasted space for any given scalar object.
+members. For example it has a place to store an integer, a floating point number, a string, an array, and something
+called "magic" among other things.  There is a lot of wasted space for any given scalar object.
 
 Under normal
 circumstances that hardly matters. If you are running a *fetchrow_array* operation over a large number of rows
 on a big *SQL* query, you are creating and tearing down a scalar for every column on every row. It can really
 add up.
 
-Yeah, don't do that. You would be better off spooling it out from *sqlplus*.
+Yeah, don't do that. You would be better off spooling it out from *sqlplus*. On the other hand, if you are reading
+and writing large chunks of data through Perl, the overhead is negligible. The underlying data movement is
+all handled in tight C code and is efficient.
 
 # Using DBD::Oracle to Read CLOB/BLOB Data
 
@@ -83,6 +88,7 @@ on the client, how can we get it from the database? Let's walk through an exampl
 
 This first part is boilerplate you will have in all of your scripts unless you have 
 refactored it into a connection object, perhpas one that handles the password management.
+
 We need the Oracle Type definitions, thus the extra argument to use DBD::Oracle.
 
 ```perl
@@ -99,7 +105,7 @@ $dbh->do("alter session set nls_date_format = 'mm/dd/yyyy'");
 ```
 Next we prepare our *PL/SQL* anonymous block. This could have been a call to ExcelGen or your own procedure
 that produces a *BLOB* or *CLOB*. In this case I'm demonstrating with *app_csv_pkg* where we pass it a query
-to run as a string. It executes the query, fetches the data and converts it into *CSV* rows and concatenates
+to run as a string. It executes the query, fetches the data, converts it into *CSV* rows, and concatenates
 them into a *CLOB*. It then returns the *CLOB* as an OUT parameter.
 
 The local hash with *ora_auto_lob* setting to false is so that we get back a *LOB* locator rather than
@@ -142,6 +148,9 @@ $sth->bind_param_inout( ':clob', \$clob, 0, {ora_type => ORA_CLOB } ); # will be
 $sth->bind_param_inout( ':rec_count', \$rec_count, 0);
 $sth->execute;
 ```
+After the *execute*, *$rec_count* has the number of rows which we can report and *$clob* has a *LOB*
+locator (which is only good to use during this transaction; a *commit* or *rollback* destroys the unerlying *LOB*.)
+
 Now we write out the data. We are writing to STDOUT here, but you could have opened
 a named file and be writing to that.
 
@@ -168,11 +177,13 @@ while(1) {
 $dbh->rollback; # to end the transaction concerning temp lob locator and freeing it so perl destructor doesn't complain
 ```
 I'm not going to print out the results, but this works just fine. My sample query output is not bigger than
-the chunk size, so it didn't loop, but it will work.
+the chunk size, so it didn't loop at first. I had to make it smaller and put in some debug
+prints to prove it, but it works.
 
 # Conclusion
 
-I've waved my hands around a lot and said you can get *CLOB* and *BLOB* data out on the client. I showed it
+I've waved my hands around a lot in prior articles saying
+you can get *CLOB* and *BLOB* data out on the client. I showed it
 with *sqlplus* and *sqlCL*. I have used Tom Kyte's *flat* utility for years (though the security mavens
 don't want me near a C compiler and Devops won't give me a deploy method for it). It was time to put up
 some proof that we can do it all with a scripting language efficiently too. Here ya' go.
