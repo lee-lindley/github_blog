@@ -2,7 +2,7 @@
 layout: post
 title: Limitations of Oracle Optimizer through DB Link
 exerpt: ""
-date: 2022-05-07 11:00:00 +0500
+date: 2022-05-08 11:00:00 +0500
 categories: [oracle, sql]
 tags: [oracle, sql, optimzer, tuning, db_link]
 ---
@@ -33,7 +33,8 @@ cannot see the structure or optimizer statistics on that *TABLE* or *TABLE*s.
 > The subject tables in my client's system are in schemas populated by a commercial vendor that we
 > touch as little as possible.
 > A separate schema is granted *SELECT* on those tables. In that schema the views are created.
-> Access to the views is granted as needed, including to our *DB_LINK* user. 
+> Access to the views is granted as needed, including to our *DB_LINK* user. This 
+> isolation of the vendor objects seems appropriate and works fine on that single database. 
 
 In that scenario our local optimizer may choose to do a nested loop with the remote table when a full
 table scan would be better, or vice versa. When it submits the request to the remote system, the optimizer
@@ -63,7 +64,7 @@ GRANT ALTER SESSION TO dbl_read_user ;
 GRANT CREATE SESSION TO dbl_read_user ;
 ```
 
-On the remote system (**rhl1pdb**) as demo user **sh** we create a view and grant *SELECT* privilege
+Also on the remote system (**rhl1pdb**) as demo user **sh** we create a view and grant *SELECT* privilege
 to **dbl_read_user**. 
 
 
@@ -92,7 +93,47 @@ ERROR at line 1:
 ORA-00942: table or view does not exist
 ```
 
+On our primary system (**leepdb**) as our test user we create the *DB_LINK* named **rhl1_dbl_read**
+and successfully test our access to the new view.
 
+```plsql
+CREATE DATABASE LINK RHL1_DBL_READ 
+CONNECT TO dbl_read_user IDENTIFIED BY "my secret password"
+USING 'rhl1pdb';
+--
+SELECT COUNT(*) from sh.sales_v@rhl1_dbl_read;
+-- returned 918843
+```
+
+If I try to get an explain plan for that query, no joy:
+
+```
+SQL> explain plan for SELECT COUNT(*) from sh.sales_v@rhl1_dbl_read;
+explain plan for SELECT COUNT(*) from sh.sales_v@rhl1_dbl_read
+*
+ERROR at line 1:
+ORA-01039: insufficient privileges on underlying objects of the view
+ORA-02063: preceding line from RHL1_DBL_READ
+```
+
+As a sanity check I created a *DB_LINK* with the **SH** user and got a good plan:
+
+```
+SQL> explain plan for select count(*) from sh.sales_v@rhl1_sh;
+
+Explained.
+SQL> select substr(plan_table_output,1,100) from table(dbms_xplan.display());
+
+----------------------------------------------------------------------------------------------------
+| Id  | Operation                      | Name            | Rows  | Cost (%CPU)| Time     | Pstart| P
+----------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT REMOTE        |                 |     1 |    27   (0)| 00:00:01 |      |
+|   1 |  SORT AGGREGATE                |                 |     1 |            |          |      |
+|   2 |   PARTITION RANGE ALL          |                 |   918K|    27   (0)| 00:00:01 |     1 |
+|   3 |    BITMAP CONVERSION COUNT     |                 |   918K|    27   (0)| 00:00:01 |      |
+|   4 |     BITMAP INDEX FAST FULL SCAN| SALES_PROMO_BIX |       |            |          |     1 |
+----------------------------------------------------------------------------------------------------
+```
 
 
 # Inconsistent Behavior
