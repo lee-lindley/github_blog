@@ -43,4 +43,11 @@
 		"date": "Aug 2021",
 		"tags": ["PL/SQL","PLSQL",Oracle","html"]
 	},
+	{
+		"name": "as_sftp",
+		"image": "hiding_data_use_case.gif",
+		"url": "https://github.com/lee-lindley/as_sftp/tree/key_management",
+		"date": "May 2022",
+		"tags": ["PL/SQL","PLSQL",Oracle","sftp"]
+	},
 ]
