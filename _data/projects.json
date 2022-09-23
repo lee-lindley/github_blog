@@ -15,6 +15,13 @@
 		"tags": ["PL/SQL","PLSQL","SQL","Oracle"]
 	},
 	{
+		"name": "app_read_xlsx",
+		"image": "spreadsheet_input_use_case.gif",
+		"url": "https://github.com/lee-lindley/app_read_xlsx",
+		"date": "Sep 2022",
+		"tags": ["PL/SQL","PLSQL","Oracle"]
+	},
+	{
 		"name": "app_csv_udt",
 		"image": "app_csv_use_case.gif",
 		"url": "https://github.com/lee-lindley/app_csv_udt",
