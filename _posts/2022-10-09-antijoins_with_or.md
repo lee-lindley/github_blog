@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Tuning Query with OR Conditions in a NOT EXISTS
-exerpt: "When tuning a query you sometimes run into uncommon problems that do not respond to the bag of tricks you brought to the game like hints and small rewrites. We know that **OR** conditions can't be hash joined and have seen the optimizer join twice with a *CONCATENATION*. It doesn't do that for *anti-joins*, so you may have to do something counter intuitive."
+exerpt: "When tuning a query you sometimes run into uncommon problems that do not respond to the bag of tricks you brought to the game like hints and small rewrites. We know that 'OR' conditions can't be hash joined and have seen the optimizer join twice with a 'CONCATENATION'. It doesn't do that for 'anti-joins', so you may have to do something counter intuitive."
 date: 2022-10-09 11:00:00 +0500
 categories: [oracle, sql]
 tags: [oracle, sql, antijoin]
@@ -49,16 +49,11 @@ WHERE
             */
     )
 ```
-The explain plan shows the operation *FILTER* between the triplet of *another_large_result_set*,
-*some_other_table*, and *ne*. The filter against *some_other_table* using the index is presumably
-really a nested loop antijoin, but the one for *ne*
-must be a one by one probe of the million rows in memory for each row of *another_large_result_set*
-(unless Oracle is doing something under the covers to optimizer it).
 
 The picture below (Toad tree view) from the actual plan shows a *FILTER* operation with 3 components - *another_large_result_set*,
 *some_other_table*, and *ne*. We can tell from the fact that it shows the index lookup, that it is doing a 
 one by one index probe of *some_other_table*. Less obvious what it is doing with *ne*, but in the absence of other
-evidence we must assume it is walking through the heap in memory looking for a match. Maybe it has sorted it and is 
+evidence, we must assume it is walking through the heap in memory looking for a match. Maybe it has sorted it and is 
 doing something smarter than that, but it is not a hash.
 
 | *Figure 1 - Explain Plan of Filter Operation for Antijoin with OR* |
@@ -149,6 +144,7 @@ using *FILTER*. It may be something that Oracle added after 10g which is the rel
 
 # Conclusion
 
-When dealing with *OR* join conditions, there is only so much the optimizer can do. When you are
-getting an unacceptable plan for a query with *OR*s in the join conditions, consider how you
-might be able to rewrite the query with two joins, one for each of the *OR*s. 
+When dealing with *OR* join conditions (*IN* lists are *OR* conditions too), 
+there is only so much the optimizer can do. When you are
+getting an unacceptable plan for a query with *OR*s in the join conditions, or especially anti-join conditions,
+consider how you might be able to rewrite the query with two joins, one for each of the *OR*s. 
