@@ -12,7 +12,7 @@ While tuning an Oracle query provided by a business user I ran into a roadblock 
 a *NOT EXISTS* clause against a large row set, one that was a Common Table Expression (CTE or WITH clause)
 that was relatively complex. The CTE plan was fine, but it resulted in about a million rows. An ideal plan
 to satisfy the *NOT EXISTS* from my perspective
-would use a *HASH ANTIJOIN* against that row set. That was not happening. It was doing a *FILTER* operation.
+would use a *HASH JOIN ANTI* against that row set. That was not happening. It was doing a *FILTER* operation.
 I'm not 100% sure what Oracle is doing under the covers on the *FILTER*.
 
 # Problem
@@ -61,16 +61,16 @@ doing something smarter than that, but it is not a hash.
 | ![](/images/hash_aj_or_1.png) |
 {:.img-table-centered}
 
-Why could it not hash the *ne* row set and probe it with a *HASH ANTIJOIN*? Because you cannot hash an *OR* condition.
+Why could it not hash the *ne* row set and probe it with a *HASH JOIN ANTI*? Because you cannot hash an *OR* condition.
 
 If it is a regular join instead of an anti-join that has this *OR* condition, the optimizer can
 break the problem into multiple *HASH JOIN*'s and do
 a *CONCATENATION* operation of the results for each of the *OR* conditions. 
 
-I do not recall seeing a plan where the optimizer chooses two separate *ANTIJOIN* operations in series. 
+I do not recall seeing a plan where the optimizer chooses two separate *JOIN ANTI* operations in series. 
 It would not be a *CONCATENATION*
 operation between them, but the opposite of that because they are anti-joins. 
-I don't think the Oracle optimizer has an operation for splitting an *ANTIJOIN* into two *ANTIJOIN*'s in sequence.
+I don't think the Oracle optimizer has an operation for splitting an *JOIN ANTI* into two *JOIN ANTI*'s in sequence.
 
 # Solution
 
@@ -130,14 +130,14 @@ WHERE
 {:.img-table-centered}
 
 That worked swimmingly. The optimizer hashed all of the rows from *ne* with a lookup value of '\*',
-also hashed all of the rows from *ne* with at lookup value that was not '\*', and did a *HASH ANTIJOIN*
+also hashed all of the rows from *ne* with at lookup value that was not '\*', and did a *HASH JOIN ANTI*
 against each in pipelined series. This was a much more efficient plan that will also scale well as
 the number of rows increases over time. The actual run time was about a third what it was before the re-write.
 Honestly I expected better than that, so maybe Oracle is doing some form of optimization on that filter
 operation under the covers.
 
 It is still showing the antijoin of *some_other_table* as a *FILTER*. I do not know why this presents as
-a filter rather than a *NESTED LOOP ANTIJOIN*. I've seen nested loop antijoin be shown by the optimizer 
+a filter rather than a *NESTED LOOP JOIN ANTI*. I've seen nested loop anti-join be shown by the optimizer 
 rather than filter in other situations and am unsure what the difference is. I went trolling through
 Jonathan Lewis's fine book *Cost-Based Oracle Fundamentals*, but did not find an example of a plan
 using *FILTER*. It may be something that Oracle added after 10g which is the release the book covered.
