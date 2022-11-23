@@ -22,6 +22,14 @@ back to it as we walk through the example if you have questions.
 
 # Walking Through an Example
 
+
+Here is an image of the spreadsheet we will produce.
+
+| *Figure 1 - Multi-Row Spreadsheet Headers Try 1* |
+|:--:|
+| ![](/images/multirowHeaders1.gif) |
+{:.img-table-centered}
+
 We want to use a small font for the report and for the report header to have bold text on a light gray
 background. To get started we create our workbook and two style handles we can assign as needed.
 
@@ -61,6 +69,13 @@ We create another style for this cell on the fly that will automatically apply t
 with *A1* in a moment. 
 
 ```plsql
+    -- add a sheet to the workbook
+    v_sheetId := ExcelGen.addSheet(
+        p_ctxId             => v_ctxId
+        ,p_sheetName        => 'Employees'
+        ,p_tabColor         => 'lime' 
+    );
+
    -- place banner text in top left corner cell
     ExcelGen.putStringCell(
         p_ctxId             => v_ctxId
@@ -104,8 +119,10 @@ to stumble and make mistakes with this.
 Notice also that we are using a style we call a *header* style for the data of this table. The
 table contains data we want to appear as column headers.
 
-The '+' characters and NULLs in the first row are to demonstrate a peculiarity of ExcelGen. We'll
-come back to it once we have the image of the spreadsheet.
+The '+' characters and NULLs in the first row are to demonstrate a peculiarity of ExcelGen. You
+will notice in the image above that even though we told the tool to make the columns in our
+mini-table have a light gray background, the cells that did not have any content, did not
+get the background style applied. Interesting.
 
 ```plsql
     v_headerTableId := ExcelGen.addTable(
@@ -129,7 +146,7 @@ SELECT 'First', 'Last', 'Department', 'Yearly' FROM dual}'
         );
     END LOOP;
 ```
-Next, we add our real query to the sheet as a second table beneath the one row header table.
+Next, we add our real query to the sheet as a second table beneath the two row header table.
 We use relative positioning for the location of this table. The concepts of the anchor and
 relative positioning are covered well in the documentation. There is a nice picture
 with examples. I have gone back to it frequently when building this and other multi-table sheets
@@ -160,6 +177,10 @@ even if you do not need *autoFilter*. We then override the column header values
 from what was in the query. You could have made the query column aliases do what you needed here
 and only had to set the column style properties.
 
+Let me point out that *setTableColumnProperties* allows us to set the value of the column header,
+but the style we are applying is to this column in the data rows, not the header. The header style
+is determined in the call to *setTableHeader*.
+
 ```plsql
     ExcelGen.setTableHeader(
         p_ctxId             => v_ctxId
@@ -182,14 +203,16 @@ and only had to set the column style properties.
         );
     END LOOP;
 ```
-We need to set the number format for the fourth column, Salary.
+We need to set the number format for the fourth data column, Salary.
 We could have created a style that included the number format
-and selectively used it with *setTableColumnProperties* above. Since
-it is a sheet level property, it applies to the header rows too, but
-since they are strings and not numbers, it doesn't matter.
+and selectively used it with *setTableColumnProperties* above. 
 
 So far I've been choosing to set the date, timestamp and number formats separately
 from the the styles.
+
+Since *setColumnFormat* operates 
+at the sheet level it applies to the header rows too, but
+since those values are strings and not numbers, it doesn't matter.
 
 ```plsql
     -- This is at the sheet level
@@ -202,8 +225,9 @@ from the the styles.
 
 ```
 
-Next we want to freeze our column headers and the first two columns of data (the name).
-In this example freezing the first two columns is not very useful, but it is instructive
+Next we want to freeze our column headers and the first two columns of data (the first and last name values).
+In this example freezing the first two columns is not very useful since the total number of
+columns is so small, but it is instructive
 to see how it is done. 
 
 Specifying the top left corner of the region that is allowed to 
@@ -211,7 +235,8 @@ scroll is what Excel does too, but we typically think in terms of which columns 
 are frozen. Too bad. We need to specify where the scrollable active pane starts.
 
 The row we make top of the scrollable region is the first one with data -- two rows
-for the banner, three rows of header, so row six is first row of data.
+for the banner, three rows of header, so row six is first row of data. Column 3 is
+the first one we want in the scrollable pane.
 
 ```plsql
     -- freeze row headers and first two columns (aka setting active pane)
@@ -236,13 +261,6 @@ and clean up after ourselves with the *closeContext*.
 END;
 /
 ```
-
-Here is an image of the spreadsheet we produced.
-
-| *Figure 1 - Multi-Row Spreadsheet Headers Try 1* |
-|:--:|
-| ![](/images/multirowHeaders1.gif) |
-{:.img-table-centered}
 
 
 # Conclusion
