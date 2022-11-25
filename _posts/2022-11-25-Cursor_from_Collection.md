@@ -305,7 +305,7 @@ function named *get_cursor_from_colletions* to my PL/SQL utility package named *
 find this at on github at [plsql_utilities](https://github.com/lee-lindley/plsql_utilities). There is
 also a version of *get_cursor_from_collections* in the package *perlish_util_pkg* if you are bent that way.
 
-Also in *app_csv_pkg* is a function that will parse a CLOB containing CSV data (like our column header)
+Also in *app_csv_pkg* is a function that will parse a CLOB containing CSV data (like our column headers)
 and return an *arr_arr_varchar2_udt* object. How handy is that? Let's see.
 
 ```plsql
