@@ -2,7 +2,7 @@
 layout: post
 title: Create a PL/SQL Cursor from a Nested Table of Nested Tables
 exerpt: "A two dimensional data structure in PL/SQL is most commonly a nested table of record types. For a generic capability of unknown record content or length we need a nested table (rows) of nested tables (columns) structure. Binding such a structure to SQL as a table to extract columns and rows is tricky."
-date: 2022-11-25 07:00:00 +0500
+date: 2022-11-25 08:00:00 +0500
 categories: [oracle, sql, plsql]
 tags: [oracle, sql, plsql]
 ---
@@ -27,7 +27,7 @@ Here is an image of the spreadsheet we will produce.
 | ![](/images/multirowHeaders1.gif) |
 {:.img-table-centered}
 
-Rows 3, 4 and 5 are out column header rows. The columns are from the *hr.employees* and *hr.departments* tables.
+Rows 3, 4 and 5 are our column header rows. The columns are from the *hr.employees* and *hr.departments* tables.
 The tool we use to generate the spreadsheet requires that we provide a SYS_REFCURSOR or a SQL query string
 as an input parameter. We'll work with a SYS_REFCURSOR here to include bind variables.
 
