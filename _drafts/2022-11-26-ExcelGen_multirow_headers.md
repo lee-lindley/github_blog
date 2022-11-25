@@ -2,7 +2,7 @@
 layout: post
 title: Creating Multiple Row Headers with ExcelGen PL/SQL Spreadsheet Generator
 exerpt: "ExcelGen prior to version 3 was limited to single row column headers and a single query per worksheet. Now we can create multi-row column headers with title banners. Walking through an example."
-date: 2022-11-22 20:00:00 +0500
+date: 2022-11-26 20:00:00 +0500
 categories: [oracle, plsql]
 tags: [oracle, plsql, Excel]
 ---

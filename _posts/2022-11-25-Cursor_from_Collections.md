@@ -3,8 +3,8 @@ layout: post
 title: Create a PL/SQL Cursor from a Nested Table of Nested Tables
 exerpt: "A two dimensional data structure in PL/SQL is most commonly a nested table of record types. For a generic capability of unknown record content or length we need a nested table (rows) of nested tables (columns) structure. Binding such a structure to SQL as a table to extract columns and rows is tricky."
 date: 2022-11-25 07:00:00 +0500
-categories: [oracle, plsql, sql]
-tags: [oracle, plsql, sql]
+categories: [oracle, sql, plsql]
+tags: [oracle, sql, plsql]
 ---
 
 # Introduction
