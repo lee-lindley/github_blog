@@ -2,7 +2,7 @@
 layout: post
 title: Creating Multiple Row Headers with ExcelGen PL/SQL Spreadsheet Generator
 exerpt: "ExcelGen prior to version 3 was limited to single row column headers and a single query per worksheet. Now we can create multi-row column headers and title banners. Walking through an example."
-date: 2022-11-27 20:00:00 +0500
+date: 2022-11-27 10:00:00 +0500
 categories: [oracle, plsql]
 tags: [oracle, plsql, Excel]
 ---
@@ -24,15 +24,15 @@ back to it as we walk through the example if you have questions.
 
 Here is an image of the spreadsheet we will produce.
 
-| *Figure 1 - Multi-Row Spreadsheet Headers Try 1* |
+| *Figure 1 - Multi-Row Spreadsheet Headers* |
 |:--:|
 | ![](/images/multirowHeaders1.gif) |
 {:.img-table-centered}
 
-The '+' characters and NULLs in the first header row are to demonstrate a peculiarity of ExcelGen. You
-will notice in the image above that even though we told the tool to make the columns in our
-mini-table have a light gray background, the cells that did not have any content, did not
-get the background style applied. Interesting.
+> The '+' characters and NULLs in the first header row are to demonstrate a peculiarity of ExcelGen. You
+> will notice in the image above that even though we told the tool to make the columns in our
+> mini-table have a light gray background, the cells that did not have any content, did not
+> get the background style applied. Interesting.
 
 The declared variables can be thought of as object handles to various parts of our logical spreadsheet.
 The values are returned by functions we call to create/declare those parts.
