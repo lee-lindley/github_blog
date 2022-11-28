@@ -70,13 +70,13 @@ FROM TABLE(:header_table)}'
         USING v_arr_headers
     ;
 ```
-Note that there is no *ORDER BY* here. We are depending on the implementation to provide the rows
-in the same order as the collection. It seems a pretty safe bet, but I have searched long and
-hard for documentation that makes a promise on this. Oracle pulled the rug out from under us once
-before when we were dependent on the implementation of *GROUP BY* via a sort. Tom Kyte wrote
-adamantly that the only way you can guarantee the order of records is to use an *ORDER BY* clause.
-Yet I cannot think of a reason why the current implementation providing the records in the same
-order as the collection would change.
+> There is no *ORDER BY* here. We are depending on the implementation to provide the rows
+> in the same order as the collection. It seems a pretty safe bet, but I have searched long and
+> hard for documentation that makes a promise on this. Oracle pulled the rug out from under us once
+> before when we were dependent on the implementation of *GROUP BY* via a sort. Tom Kyte wrote
+> adamantly that the only way you can guarantee the order of records is to use an *ORDER BY* clause.
+> Yet I cannot think of a reason why the current implementation providing the records in the same
+> order as the collection would change.
 
 # A Generic Solution
 
@@ -106,8 +106,10 @@ Now our procedure declaration becomes:
     );
 ```
 There is a glitch in the matrix though. How do we extract the individual elements of each row in the SQL
-statement for the cursor? Here is one way. Note the careful use of table aliases. Object access in SQL has a quirk
-where an alias for the table or Common Table Expression (CTE) name is required:
+statement for the cursor? Here is one way. 
+
+> Note the careful use of table aliases. Object access in SQL has a quirk
+> where an alias for the table or Common Table Expression (CTE) name is required.
 
 One triksie part here is the join in the CTE named *b*. We are joining to a column in our
 rowset from CTE named *a*. Think that through. For each row from *a*, we treat the column
@@ -303,7 +305,7 @@ That looks pretty good. We could use it as-is for any project and be pretty plea
 I like this concept of opening a cursor from a two dimensional collection object enough that I added a
 function named *get_cursor_from_colletions* to my PL/SQL utility package named *app_csv_pkg*. You can
 find this at on github at [plsql_utilities](https://github.com/lee-lindley/plsql_utilities). There is
-also a version of *get_cursor_from_collections* in the package *perlish_util_pkg* if you are bent that way.
+a version of *get_cursor_from_collections* in the package *perlish_util_pkg* too if you are bent that way.
 
 Also in *app_csv_pkg* is a function that will parse a CLOB containing CSV data (like our column headers)
 and return an *arr_arr_varchar2_udt* object. How handy is that? Let's see.
@@ -349,7 +351,13 @@ Name                     Name                     Name                     Salar
 SQL>
 ```
 
-Now we're cooking with gas!
+Now we're cooking with gas! 
+
+You may already have the column headers in a spreadsheet. I often have them as part of a requirements
+document.
+Export them as CSV (*Save As CSV* might give you an evil windows character at the start of the
+file - use Export instead). Now you can copy/paste that file content directly into your
+PL/SQL program. It will even handle commas embedded in the fields correctly.
 
 # Conclusion
 
