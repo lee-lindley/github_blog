@@ -32,7 +32,7 @@ Here is an image of the spreadsheet we will produce.
 > The '+' characters and NULLs in the first header row are to demonstrate a peculiarity of ExcelGen. You
 > will notice in the image above that even though we told the tool to make the columns in our
 > mini-table have a light gray background, the cells that did not have any content, did not
-> get the background style applied. Interesting.
+> get the background style applied. I opened an issue and expect it will be addressed in the next release.
 
 The declared variables can be thought of as object handles to various parts of our logical spreadsheet.
 The values are returned by functions we call to create/declare those parts.
