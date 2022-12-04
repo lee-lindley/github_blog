@@ -293,7 +293,9 @@ creation with *ExcelGen* and also now some bells and whistles with a banner and 
 headers.
 
 It is a lot of code though. I intend to refactor into a reusable utility procedure for multi-row
-column headers. I'll cover that in another article once I refine it.
+column headers. I was going to cover that utility in another article. I wound up doing the work
+for an employer on their dime, so it isn't mine to share. If you have read this far, I'm sure
+you could create your own given the pattern shown here.
 
 # Appendix - Full Code Listing
 ```plsql
