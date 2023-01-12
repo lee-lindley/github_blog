@@ -303,7 +303,7 @@ That looks pretty good. We could use it as-is for any project and be pretty plea
 # Refactoring the Refactoring
 
 I like this concept of opening a cursor from a two dimensional collection object enough that I added a
-function named *get_cursor_from_colletions* to my PL/SQL utility package named *app_csv_pkg*. You can
+function named *get_cursor_from_collections* to my PL/SQL utility package named *app_csv_pkg*. You can
 find this at on github at [plsql_utilities](https://github.com/lee-lindley/plsql_utilities). There is
 a version of *get_cursor_from_collections* in the package *perlish_util_pkg* too if you are bent that way.
 
