@@ -261,7 +261,7 @@ to maintain a set of session specific context numbers allowing for multiple spre
 in a single session. The package also implements the call to *as_read_xlsx* when it populates the GTT. You
 can look at your leisure.
 
-In [Overview](@overview) we listed the tasks the function needed to perform in a bullet list. Most
+In [Overview](#Overview) we listed the tasks the function needed to perform in a bullet list. Most
 of these tasks are handled in the static pipelined table function *app_read_xlsx_udt.get_data_rows* via a cursor
 that uses a bind variable for the number of columns we have in our input (gathered during object
 constructor call). 
